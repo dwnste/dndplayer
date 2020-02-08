@@ -1,29 +1,27 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  PermissionsAndroid,
-} from 'react-native';
+import {SafeAreaView, Text, View, PermissionsAndroid} from 'react-native';
 
 import RNFS from 'react-native-fs';
 
-interface SettingsState {
-  folders: RNFS.ReadDirItem[];
-}
+import {SettingsServiceInterface} from '../../services/settings';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {StackParamList} from '../../App';
 
-class Settings extends React.Component<SettingsState> {
+type SettingsScreenNavigationProp = StackNavigationProp<
+  StackParamList,
+  'Settings'
+>;
+
+type SettingsState = {
+  folders: RNFS.ReadDirItem[];
+};
+
+type SettingsProps = {
+  settingsService: SettingsServiceInterface;
+  navigation: SettingsScreenNavigationProp;
+};
+
+class Settings extends React.Component<SettingsProps, SettingsState> {
   state: SettingsState = {
     folders: [],
   };
@@ -41,7 +39,7 @@ class Settings extends React.Component<SettingsState> {
   };
 
   askForPermissions = async () => {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
 
     const request = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
@@ -69,7 +67,5 @@ class Settings extends React.Component<SettingsState> {
     return <SafeAreaView>{folders}</SafeAreaView>;
   }
 }
-
-const styles = StyleSheet.create({});
 
 export default Settings;
