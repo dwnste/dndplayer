@@ -1,9 +1,16 @@
-import React from 'react';
-import {SafeAreaView, Text, View, PermissionsAndroid} from 'react-native';
+import React, {useState} from 'react';
+import {SafeAreaView, View, StyleSheet, Button} from 'react-native';
+import {useObserver} from 'mobx-react-lite';
 
-import RNFS from 'react-native-fs';
+import Folder from './components/Folder';
+import ExplorerModal from './components/ExplorerModal';
 
-import {SettingsServiceInterface} from '../../services/settings';
+import {useStores} from '../../hooks';
+
+import {ExternalStorageDirectoryPath, ReadDirItem} from 'react-native-fs';
+
+import {SCREENS} from '../../consts/screens';
+
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from '../../App';
 
@@ -12,60 +19,106 @@ type SettingsScreenNavigationProp = StackNavigationProp<
   'Settings'
 >;
 
-type SettingsState = {
-  folders: RNFS.ReadDirItem[];
-};
-
 type SettingsProps = {
-  settingsService: SettingsServiceInterface;
   navigation: SettingsScreenNavigationProp;
 };
 
-class Settings extends React.Component<SettingsProps, SettingsState> {
-  state: SettingsState = {
-    folders: [],
-  };
+const Settings = ({navigation}: SettingsProps) => {
+  const {settingsStore} = useStores();
 
-  componentDidMount = async () => {
-    await this.askForPermissions();
+  const [fxModalVisible, setFxModalVisible] = useState(false);
+  const [musicModalVisible, setMusicModalVisible] = useState(false);
 
-    RNFS.readDir(RNFS.ExternalStorageDirectoryPath)
-      .then(result =>
-        this.setState({
-          folders: result,
-        }),
-      )
-      .catch(error => console.log(error));
-  };
-
-  askForPermissions = async () => {
-    const {navigation} = this.props;
-
-    const request = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+  const toggleFxModal = (): void => {
+    settingsStore.updateFXExplorer(
+      settingsStore.explorers.fx.path || ExternalStorageDirectoryPath,
     );
+    setFxModalVisible(!fxModalVisible);
+  };
 
-    const isGranted = request === PermissionsAndroid.RESULTS.GRANTED;
+  const toggleMusicModal = (): void => {
+    settingsStore.updateMusicExplorer(
+      settingsStore.explorers.music.path || ExternalStorageDirectoryPath,
+    );
+    setMusicModalVisible(!musicModalVisible);
+  };
 
-    if (isGranted) {
+  const handleOpenFXDir = (item: ReadDirItem): void => {
+    if (!item.isDirectory()) {
       return;
     }
 
-    navigation.navigate('Main');
+    settingsStore.updateFXExplorer(item.path);
   };
 
-  renderFolders = (): React.ReactNode =>
-    this.state.folders.map(folder => (
-      <View key={folder.name}>
-        <Text>{folder.name}</Text>
+  const handleOpenMusicDir = (item: ReadDirItem): void => {
+    if (!item.isDirectory()) {
+      return;
+    }
+
+    settingsStore.updateMusicExplorer(item.path);
+  };
+
+  const handleSetDir = (i: ReadDirItem) => {
+    settingsStore.setMusicDir(i);
+  };
+
+  return useObserver(() => (
+    <SafeAreaView style={styles.wrap}>
+      <View style={styles.itemWrap}>
+        <View style={styles.menuWrap}>
+          <Folder
+            name="FX folder"
+            path={settingsStore.paths.fx}
+            onPress={toggleFxModal}
+          />
+          <Folder
+            name="Music folder"
+            path={settingsStore.paths.music}
+            onPress={toggleMusicModal}
+          />
+        </View>
+        <Button
+          title="Back"
+          onPress={() => {
+            navigation.navigate(SCREENS.main);
+          }}
+        />
       </View>
-    ));
+      <ExplorerModal
+        visible={fxModalVisible}
+        toggle={toggleFxModal}
+        setDir={handleSetDir}
+        openDir={handleOpenFXDir}
+        items={settingsStore.explorers.fx.items}
+      />
+      <ExplorerModal
+        visible={musicModalVisible}
+        toggle={toggleMusicModal}
+        setDir={settingsStore.setMusicDir}
+        openDir={handleOpenMusicDir}
+        items={settingsStore.explorers.music.items}
+      />
+    </SafeAreaView>
+  ));
+};
 
-  render(): React.ReactNode {
-    const folders = this.renderFolders();
-
-    return <SafeAreaView>{folders}</SafeAreaView>;
-  }
-}
+const styles = StyleSheet.create({
+  menuWrap: {
+    flexGrow: 1,
+  },
+  wrap: {
+    flex: 1,
+    padding: 20,
+  },
+  item: {
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
+  itemWrap: {
+    flex: 1,
+    marginTop: 15,
+  },
+});
 
 export default Settings;

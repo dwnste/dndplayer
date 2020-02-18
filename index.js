@@ -1,7 +1,4 @@
-/**
- * @format
- */
-import 'react-native-gesture-handler'; // TODO: remove when fixed
+import 'react-native-gesture-handler'; // TODO: remove
 
 import {AppRegistry} from 'react-native';
 import App from './js/App';

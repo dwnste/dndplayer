@@ -1,11 +1,13 @@
 import React from 'react';
+import {View, StyleSheet} from 'react-native';
+
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import SettingsService from './services/settings';
-
 import Settings from './screens/Settings';
 import Main from './screens/Main';
+
+import {configure} from 'mobx';
 
 import {SCREENS} from './consts/screens';
 
@@ -14,21 +16,29 @@ export type StackParamList = {
   Settings: undefined;
 };
 
-const Stack = createStackNavigator<StackParamList>();
+// Set mobx
+configure({enforceActions: 'observed'});
 
-const settingService = new SettingsService();
+const Stack = createStackNavigator<StackParamList>();
 
 const App = (): JSX.Element => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName={SCREENS.main} headerMode="none">
-        <Stack.Screen name={SCREENS.main} component={Main} />
-        <Stack.Screen name={SCREENS.settings}>
-          {props => <Settings {...props} settingsService={settingService} />}
-        </Stack.Screen>
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View style={styles.wrap}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName={SCREENS.main} headerMode="none">
+          <Stack.Screen name={SCREENS.main} component={Main} />
+          <Stack.Screen name={SCREENS.settings} component={Settings} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  wrap: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+});
 
 export default App;
