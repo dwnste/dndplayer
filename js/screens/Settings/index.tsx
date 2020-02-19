@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
 import {SafeAreaView, View, StyleSheet, Button} from 'react-native';
 import {useObserver} from 'mobx-react-lite';
 
@@ -7,10 +7,11 @@ import ExplorerModal from './components/ExplorerModal';
 
 import {useStores} from '../../hooks';
 
-import {ExternalStorageDirectoryPath, ReadDirItem} from 'react-native-fs';
+import {requestExternalStorageReading} from '../../utils/permissions';
 
 import {SCREENS} from '../../consts/screens';
 
+import {ExternalStorageDirectoryPath, ReadDirItem} from 'react-native-fs';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from '../../App';
 
@@ -25,6 +26,36 @@ type SettingsProps = {
 
 const Settings = ({navigation}: SettingsProps) => {
   const {settingsStore} = useStores();
+
+  useEffect(() => {
+    const init = async () => {
+      const granted = await requestExternalStorageReading();
+
+      if (!granted) {
+        navigation.navigate(SCREENS.main);
+      }
+    };
+
+    init();
+  });
+
+  useLayoutEffect(() => {
+    const init = async () => {
+      settingsStore.setLoading(true);
+
+      try {
+        await settingsStore.setPaths();
+      } catch {}
+
+      settingsStore.setLoading(false);
+    };
+
+    init();
+
+    return () => {
+      settingsStore.reset();
+    };
+  }, [settingsStore]);
 
   const [fxModalVisible, setFxModalVisible] = useState(false);
   const [musicModalVisible, setMusicModalVisible] = useState(false);
@@ -59,48 +90,58 @@ const Settings = ({navigation}: SettingsProps) => {
     settingsStore.updateMusicExplorer(item.path);
   };
 
-  const handleSetDir = (i: ReadDirItem) => {
-    settingsStore.setMusicDir(i);
-  };
+  const renderContent = () => {
+    if (settingsStore.loading) {
+      return null;
+    }
 
-  return useObserver(() => (
-    <SafeAreaView style={styles.wrap}>
-      <View style={styles.itemWrap}>
-        <View style={styles.menuWrap}>
-          <Folder
-            name="FX folder"
-            path={settingsStore.paths.fx}
-            onPress={toggleFxModal}
-          />
-          <Folder
-            name="Music folder"
-            path={settingsStore.paths.music}
-            onPress={toggleMusicModal}
+    return (
+      <SafeAreaView style={styles.wrap}>
+        <View style={styles.itemWrap}>
+          <View style={styles.menuWrap}>
+            <Folder
+              name="FX folder"
+              path={settingsStore.paths.fx}
+              onPress={toggleFxModal}
+            />
+            <Folder
+              name="Music folder"
+              path={settingsStore.paths.music}
+              onPress={toggleMusicModal}
+            />
+          </View>
+          <Button
+            title="Back"
+            onPress={() => {
+              navigation.navigate(SCREENS.main);
+            }}
           />
         </View>
-        <Button
-          title="Back"
-          onPress={() => {
-            navigation.navigate(SCREENS.main);
+        <ExplorerModal
+          visible={fxModalVisible}
+          toggle={toggleFxModal}
+          setDir={i => {
+            settingsStore.setFXDir(i);
+            toggleFxModal();
           }}
+          openDir={handleOpenFXDir}
+          items={settingsStore.explorers.fx.items}
         />
-      </View>
-      <ExplorerModal
-        visible={fxModalVisible}
-        toggle={toggleFxModal}
-        setDir={handleSetDir}
-        openDir={handleOpenFXDir}
-        items={settingsStore.explorers.fx.items}
-      />
-      <ExplorerModal
-        visible={musicModalVisible}
-        toggle={toggleMusicModal}
-        setDir={settingsStore.setMusicDir}
-        openDir={handleOpenMusicDir}
-        items={settingsStore.explorers.music.items}
-      />
-    </SafeAreaView>
-  ));
+        <ExplorerModal
+          visible={musicModalVisible}
+          toggle={toggleMusicModal}
+          setDir={i => {
+            settingsStore.setMusicDir(i);
+            toggleMusicModal();
+          }}
+          openDir={handleOpenMusicDir}
+          items={settingsStore.explorers.music.items}
+        />
+      </SafeAreaView>
+    );
+  };
+
+  return useObserver(() => renderContent());
 };
 
 const styles = StyleSheet.create({

@@ -26,17 +26,23 @@ type ExplorersType = {
 };
 
 export interface SettingsStoreInterface {
+  loading: boolean;
   paths: PathsType;
   explorers: ExplorersType;
+  reset(): void;
+  setLoading(value: boolean): void;
   updateFXExplorer(path: string): CancellablePromise<unknown>;
   updateMusicExplorer(path: string): CancellablePromise<unknown>;
   setFXDir(item: ReadDirItem): CancellablePromise<unknown>;
-  getFXDir(): Promise<string | null>;
+  getFXDir(): CancellablePromise<unknown>;
   setMusicDir(item: ReadDirItem): CancellablePromise<unknown>;
-  getMusicDir(): Promise<string | null>;
+  getMusicDir(): CancellablePromise<unknown>;
+  setPaths(): CancellablePromise<unknown>;
 }
 
 class SettingsStore implements SettingsStoreInterface {
+  @observable loading = false;
+
   @observable
   paths: PathsType = {
     fx: DEFAULT_PATH,
@@ -53,6 +59,11 @@ class SettingsStore implements SettingsStoreInterface {
       path: DEFAULT_PATH,
       items: [],
     },
+  };
+
+  @action
+  setLoading = (value: boolean = false) => {
+    this.loading = value;
   };
 
   setFXDir = flow(function*(this: SettingsStoreInterface, item: ReadDirItem) {
@@ -121,11 +132,35 @@ class SettingsStore implements SettingsStoreInterface {
     }
   });
 
-  @action
-  getFXDir = (): Promise<string | null> => get(FX_DIR_NAME);
+  getFXDir = flow(function*(this: SettingsStoreInterface) {
+    const path = yield get(FX_DIR_NAME);
+    this.paths.fx = path || '';
+  });
+
+  getMusicDir = flow(function*(this: SettingsStoreInterface) {
+    const path = yield get(MUSIC_DIR_NAME);
+    this.paths.music = path || '';
+  });
+
+  setPaths = flow(function*(this: SettingsStoreInterface) {
+    yield Promise.all([this.getFXDir(), this.getMusicDir()]);
+  });
 
   @action
-  getMusicDir = (): Promise<string | null> => get(MUSIC_DIR_NAME);
+  reset = () => {
+    this.loading = false;
+
+    this.explorers = {
+      fx: {
+        path: DEFAULT_PATH,
+        items: [],
+      },
+      music: {
+        path: DEFAULT_PATH,
+        items: [],
+      },
+    };
+  };
 }
 
 export default SettingsStore;
