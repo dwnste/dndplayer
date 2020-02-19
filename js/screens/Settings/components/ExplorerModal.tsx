@@ -13,6 +13,8 @@ type ExplorerModalProps = {
   openDir: (item: ReadDirItem) => any;
 };
 
+const showSelect = (item: ReadDirItem) => item.isDirectory();
+
 const ExplorerModal = ({
   items,
   visible,
@@ -21,7 +23,13 @@ const ExplorerModal = ({
   openDir,
 }: ExplorerModalProps) => (
   <Modal visible={visible} onClose={toggle}>
-    <Explorer items={items} onPress={openDir} onSelect={setDir} />
+    <Explorer
+      showSelect={showSelect}
+      items={items}
+      onPress={openDir}
+      onSelect={setDir}
+      onPressBack={() => {}}
+    />
   </Modal>
 );
 

@@ -10,6 +10,7 @@ type FileExplorerProps = {
   onSelect: (item: ReadDirItem) => void | Promise<void>;
   onPress: (item: ReadDirItem) => void | Promise<void>;
   onPressBack: (e: Event) => void;
+  showSelect: (item: ReadDirItem) => boolean;
 };
 
 const generateKey = ({name, isDirectory}: ReadDirItem): string => {
@@ -23,6 +24,7 @@ const FileExplorer = ({
   onSelect,
   onPress,
   onPressBack,
+  showSelect = () => false,
 }: FileExplorerProps) => {
   return (
     <View>
@@ -33,6 +35,7 @@ const FileExplorer = ({
           item={item}
           onPress={onPress}
           onSelect={onSelect}
+          showSelect={showSelect}
         />
       ))}
     </View>

@@ -7,24 +7,28 @@ type ExplorerItemProps = {
   item: ReadDirItem;
   onSelect: (item: ReadDirItem) => void;
   onPress: (item: ReadDirItem) => void | Promise<void>;
+  showSelect: (item: ReadDirItem) => boolean;
 };
 
 const ExplorerItem = ({
   item,
   onSelect,
   onPress,
+  showSelect,
 }: ExplorerItemProps): JSX.Element => (
   <TouchableOpacity style={styles.wrap2} onPress={() => onPress(item)}>
     <View style={styles.wrap}>
       <Text style={styles.text}>{item.name}</Text>
     </View>
-    <Button
-      title="Select"
-      onPress={e => {
-        e.stopPropagation();
-        onSelect(item);
-      }}
-    />
+    {showSelect(item) && (
+      <Button
+        title="Select"
+        onPress={e => {
+          e.stopPropagation();
+          onSelect(item);
+        }}
+      />
+    )}
   </TouchableOpacity>
 );
 
