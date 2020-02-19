@@ -14,30 +14,29 @@ const ExplorerItem = ({
   onSelect,
   onPress,
 }: ExplorerItemProps): JSX.Element => (
-  <TouchableOpacity onPress={() => onPress(item)}>
-    <View style={styles.wrap2}>
-      <View style={styles.wrap}>
-        <Text style={styles.text}>{item.name}</Text>
-      </View>
-      <Button
-        title="Select"
-        onPress={e => {
-          e.stopPropagation();
-          onSelect(item);
-        }}
-      />
+  <TouchableOpacity style={styles.wrap2} onPress={() => onPress(item)}>
+    <View style={styles.wrap}>
+      <Text style={styles.text}>{item.name}</Text>
     </View>
+    <Button
+      title="Select"
+      onPress={e => {
+        e.stopPropagation();
+        onSelect(item);
+      }}
+    />
   </TouchableOpacity>
 );
 
 const styles = StyleSheet.create({
   wrap2: {
+    marginTop: 5,
+    marginBottom: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   wrap: {
-    paddingTop: 10,
-    paddingBottom: 10,
+    padding: 5,
   },
   text: {
     fontSize: 20,

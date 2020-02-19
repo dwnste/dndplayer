@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, Button} from 'react-native';
 
 import ExplorerItem from './components/ExplorerItem';
 
@@ -9,6 +9,7 @@ type FileExplorerProps = {
   items: ReadDirItem[];
   onSelect: (item: ReadDirItem) => void | Promise<void>;
   onPress: (item: ReadDirItem) => void | Promise<void>;
+  onPressBack: (e: Event) => void;
 };
 
 const generateKey = ({name, isDirectory}: ReadDirItem): string => {
@@ -17,9 +18,15 @@ const generateKey = ({name, isDirectory}: ReadDirItem): string => {
   return `${prefix}_${name}`;
 };
 
-const FileExplorer = ({items, onSelect, onPress}: FileExplorerProps) => {
+const FileExplorer = ({
+  items,
+  onSelect,
+  onPress,
+  onPressBack,
+}: FileExplorerProps) => {
   return (
     <View>
+      <Button title="..." onPress={onPressBack} />
       {items.map(item => (
         <ExplorerItem
           key={generateKey(item)}
