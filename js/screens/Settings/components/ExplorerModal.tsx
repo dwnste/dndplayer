@@ -11,6 +11,7 @@ type ExplorerModalProps = {
   toggle: (e: Event) => void;
   setDir: (item: ReadDirItem) => any;
   openDir: (item: ReadDirItem) => any;
+  onPressBack: () => void;
 };
 
 const showSelect = (item: ReadDirItem) => item.isDirectory();
@@ -21,6 +22,7 @@ const ExplorerModal = ({
   toggle,
   setDir,
   openDir,
+  onPressBack,
 }: ExplorerModalProps) => (
   <Modal visible={visible} onClose={toggle}>
     <Explorer
@@ -28,7 +30,7 @@ const ExplorerModal = ({
       items={items}
       onPress={openDir}
       onSelect={setDir}
-      onPressBack={() => {}}
+      onPressBack={onPressBack}
     />
   </Modal>
 );

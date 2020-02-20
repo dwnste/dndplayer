@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useLayoutEffect} from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView, View, StyleSheet, Button} from 'react-native';
 import {useObserver} from 'mobx-react-lite';
 
@@ -6,8 +6,6 @@ import Folder from './components/Folder';
 import ExplorerModal from './components/ExplorerModal';
 
 import {useStores} from '../../hooks';
-
-import {requestExternalStorageReading} from '../../utils/permissions';
 
 import {SCREENS} from '../../consts/screens';
 
@@ -25,37 +23,7 @@ type SettingsProps = {
 };
 
 const Settings = ({navigation}: SettingsProps) => {
-  const {settingsStore} = useStores();
-
-  useEffect(() => {
-    const init = async () => {
-      const granted = await requestExternalStorageReading();
-
-      if (!granted) {
-        navigation.navigate(SCREENS.main);
-      }
-    };
-
-    init();
-  });
-
-  useLayoutEffect(() => {
-    const init = async () => {
-      settingsStore.setLoading(true);
-
-      try {
-        await settingsStore.setPaths();
-      } catch {}
-
-      settingsStore.setLoading(false);
-    };
-
-    init();
-
-    return () => {
-      settingsStore.reset();
-    };
-  }, [settingsStore]);
+  const {settingsStore, playlistsStore} = useStores();
 
   const [fxModalVisible, setFxModalVisible] = useState(false);
   const [musicModalVisible, setMusicModalVisible] = useState(false);
@@ -90,7 +58,63 @@ const Settings = ({navigation}: SettingsProps) => {
     settingsStore.updateMusicExplorer(item.path);
   };
 
-  const renderContent = () => {
+  const handlePressBackForMusicDir = (): void => {
+    const {path} = settingsStore.explorers.music;
+
+    if (path === ExternalStorageDirectoryPath) {
+      return;
+    }
+
+    settingsStore.updateMusicExplorer(path.slice(0, path.lastIndexOf('/')));
+  };
+
+  const handlePressBackForFxDir = (): void => {
+    const {path} = settingsStore.explorers.fx;
+
+    if (path === ExternalStorageDirectoryPath) {
+      return;
+    }
+
+    settingsStore.updateFXExplorer(path.slice(0, path.lastIndexOf('/')));
+  };
+
+  const setFxDir = async (item: ReadDirItem): Promise<void> => {
+    try {
+      await settingsStore.setFXDir(item);
+      const filteredFxList = settingsStore.explorers.fx.items.filter(file =>
+        file.isFile(),
+      );
+      playlistsStore.setPlaylistForFx(filteredFxList);
+
+      if (!playlistsStore.currentFx && filteredFxList.length) {
+        playlistsStore.setCurrentFx(playlistsStore.fxPlaylist[0]);
+      }
+    } catch {}
+
+    toggleFxModal();
+  };
+
+  const setMusicDir = async (item: ReadDirItem): Promise<void> => {
+    try {
+      await settingsStore.setMusicDir(item);
+      const filteredMusicList = settingsStore.explorers.music.items.filter(
+        file => file.isFile(),
+      );
+      playlistsStore.setPlaylistForMusic(filteredMusicList);
+
+      if (!playlistsStore.currentMusic && filteredMusicList.length) {
+        playlistsStore.setCurrentMusic(playlistsStore.musicPlaylist[0]);
+      }
+    } catch {}
+
+    toggleMusicModal();
+  };
+
+  const goToMain = (): void => {
+    navigation.navigate(SCREENS.main);
+  };
+
+  const renderContent = (): JSX.Element | null => {
     if (settingsStore.loading) {
       return null;
     }
@@ -110,32 +134,23 @@ const Settings = ({navigation}: SettingsProps) => {
               onPress={toggleMusicModal}
             />
           </View>
-          <Button
-            title="Back"
-            onPress={() => {
-              navigation.navigate(SCREENS.main);
-            }}
-          />
+          <Button title="Back" onPress={goToMain} />
         </View>
         <ExplorerModal
           visible={fxModalVisible}
           toggle={toggleFxModal}
-          setDir={i => {
-            settingsStore.setFXDir(i);
-            toggleFxModal();
-          }}
+          setDir={setFxDir}
           openDir={handleOpenFXDir}
           items={settingsStore.explorers.fx.items}
+          onPressBack={handlePressBackForFxDir}
         />
         <ExplorerModal
           visible={musicModalVisible}
           toggle={toggleMusicModal}
-          setDir={i => {
-            settingsStore.setMusicDir(i);
-            toggleMusicModal();
-          }}
+          setDir={setMusicDir}
           openDir={handleOpenMusicDir}
           items={settingsStore.explorers.music.items}
+          onPressBack={handlePressBackForMusicDir}
         />
       </SafeAreaView>
     );

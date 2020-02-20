@@ -5,6 +5,8 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "build:android": "cd android && ./gradlew assembleRelease && cd ..",
+    "bundle:android": "cd android && ./gradlew bundleRelease && cd ..",
     "start": "react-native start --reset-cache",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
@@ -23,7 +25,8 @@
     "react-native-reanimated": "^1.7.0",
     "react-native-safe-area-context": "^0.7.2",
     "react-native-screens": "^2.0.0-beta.2",
-    "react-native-video": "^5.0.2"
+    "react-native-video": "^5.0.2",
+    "rn-vertical-slider": "^1.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
