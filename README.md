@@ -1,6 +1,6 @@
 # dndplayer
 
-It is a dead simple audio player which allows you to play two tracks in the same time. One of these tracks is supposed to be an FX, so it plays repeatedly and the only parameter can be adjusted here is a volume level. Besides, there is a basic audio player functionality which can be applied for a second track.
+It is a dead simple audio player which allows you to play two tracks at the same time. One of these tracks is supposed to be an FX, so it plays repeatedly and the only parameter can be adjusted here is a volume level. Besides, there is a basic audio player functionality which can be applied for a second track.
 
 For now (and I guess it's going to stay so) it is android only.
 
