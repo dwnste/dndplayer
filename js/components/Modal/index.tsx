@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Modal as RNModal,
-  StyleSheet,
-  ScrollView,
-  View,
-  Button,
-} from 'react-native';
+import {Modal as RNModal, StyleSheet, View, Button} from 'react-native';
 
 type ModalProps = {
   visible: boolean;
@@ -18,7 +12,7 @@ const Modal = ({children, onClose, visible}: ModalProps) => {
     <RNModal transparent visible={visible} animationType="fade">
       <View style={styles.overlay}>
         <View style={styles.wrap}>
-          <ScrollView>{children || null}</ScrollView>
+          {children}
           <View style={styles.buttonWrap}>
             <Button title="Close" onPress={onClose} />
           </View>

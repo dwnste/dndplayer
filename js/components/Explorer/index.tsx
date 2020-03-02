@@ -1,7 +1,9 @@
 import React from 'react';
-import {View, Button} from 'react-native';
+import {View, Button, FlatList, StyleSheet} from 'react-native';
 
 import ExplorerItem from './components/ExplorerItem';
+
+import {generateKey} from '../../utils/keygenerator';
 
 import {ReadDirItem} from 'react-native-fs';
 
@@ -13,12 +15,6 @@ type FileExplorerProps = {
   showSelect: (item: ReadDirItem) => boolean;
 };
 
-const generateKey = ({name, isDirectory}: ReadDirItem): string => {
-  const prefix = isDirectory() ? 'dir' : 'file';
-
-  return `${prefix}_${name}`;
-};
-
 const FileExplorer = ({
   items,
   onSelect,
@@ -27,19 +23,28 @@ const FileExplorer = ({
   showSelect = () => false,
 }: FileExplorerProps) => {
   return (
-    <View>
+    <View style={styles.container}>
       <Button title="..." onPress={onPressBack} />
-      {items.map(item => (
-        <ExplorerItem
-          key={generateKey(item)}
-          item={item}
-          onPress={onPress}
-          onSelect={onSelect}
-          showSelect={showSelect}
-        />
-      ))}
+      <FlatList
+        data={items}
+        renderItem={({item}) => (
+          <ExplorerItem
+            item={item}
+            onPress={onPress}
+            onSelect={onSelect}
+            showSelect={showSelect}
+          />
+        )}
+        keyExtractor={generateKey}
+      />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 export default FileExplorer;

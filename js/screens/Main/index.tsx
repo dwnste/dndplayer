@@ -4,11 +4,14 @@ import {StyleSheet, View} from 'react-native';
 import IconButton from '../../components/IconButton';
 import Player from '../../components/Player';
 import Slider from '../../components/Slider';
+import Modal from '../../components/Modal';
+import Playlist from '../../components/Playlist';
 
 import {useStores} from '../../hooks';
 import {useObserver} from 'mobx-react-lite';
 
 import {StackNavigationProp} from '@react-navigation/stack';
+import {ReadDirItem} from 'react-native-fs';
 import {StackParamList} from '../../App';
 
 import {SCREENS} from '../../consts/screens';
@@ -29,6 +32,8 @@ const Main = ({navigation}: MainProps): JSX.Element => {
   const [fxPaused, setFxPaused] = useState(true);
   const [musicVolume, setMusicVolume] = useState(1);
   const [fxVolume, setFxVolume] = useState(1);
+  const [musicPlaylistVisible, setMusicPlaylistVisible] = useState(false);
+  const [fxPlaylistVisible, setFXPlaylistVisible] = useState(false);
 
   const toggle = (): void => {
     if (!playlistsStore.currentMusic) {
@@ -62,6 +67,22 @@ const Main = ({navigation}: MainProps): JSX.Element => {
     navigation.navigate(SCREENS.settings);
   };
 
+  const onToggleMusicPlaylist = (): void => {
+    setMusicPlaylistVisible(!musicPlaylistVisible);
+  };
+
+  const onToggleFxPlaylist = (): void => {
+    setFXPlaylistVisible(!fxPlaylistVisible);
+  };
+
+  const onSelectMusicFromPlaylist = (item: ReadDirItem): void => {
+    playlistsStore.setCurrentMusic(item);
+  };
+
+  const onSelectFxFromPlaylist = (item: ReadDirItem): void => {
+    playlistsStore.setCurrentMusic(item);
+  };
+
   return useObserver(() => (
     <View style={styles.wrap}>
       <View style={styles.iconWrap}>
@@ -79,6 +100,7 @@ const Main = ({navigation}: MainProps): JSX.Element => {
           paused={fxPaused}
           toggle={toggleFx}
           volume={fxVolume}
+          onTogglePlaylist={onToggleFxPlaylist}
         />
         <View style={styles.volumeWrap}>
           <Slider onChange={setFxVolume} />
@@ -95,8 +117,23 @@ const Main = ({navigation}: MainProps): JSX.Element => {
           onPrevious={onPrevious}
           onEnd={onNext}
           onToggleRepeat={onToggleRepeat}
+          onTogglePlaylist={onToggleMusicPlaylist}
         />
       </View>
+      <Modal visible={musicPlaylistVisible} onClose={onToggleMusicPlaylist}>
+        <Playlist
+          list={playlistsStore.musicPlaylist}
+          currentItem={playlistsStore.currentMusic}
+          onSelect={onSelectMusicFromPlaylist}
+        />
+      </Modal>
+      <Modal visible={fxPlaylistVisible} onClose={onToggleFxPlaylist}>
+        <Playlist
+          list={playlistsStore.fxPlaylist}
+          currentItem={playlistsStore.currentFx}
+          onSelect={onSelectFxFromPlaylist}
+        />
+      </Modal>
     </View>
   ));
 };
