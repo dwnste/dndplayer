@@ -13,6 +13,7 @@ const playIcon = require('./icons/play.png');
 const pauseIcon = require('./icons/pause.png');
 const rewindIcon = require('./icons/rewind.png');
 const repeatIcon = require('./icons/repeat.png');
+const repeatToggledIcon = require('./icons/repeat_toggled.png');
 const playlistIcon = require('./icons/playlist.png');
 
 type ControlsProps = {
@@ -56,6 +57,7 @@ const Controls = ({
   }, [progress]);
 
   const playOrPauseIcon = paused ? playIcon : pauseIcon;
+  const repeatStateIcon = repeat ? repeatToggledIcon : repeatIcon;
 
   const barStyles = {
     backgroundColor: 'rgb(21, 126, 251)',
@@ -72,7 +74,7 @@ const Controls = ({
       <View style={styles.controlsWrap}>
         <IconButton
           onPress={onToggleRepeat}
-          imgSource={repeatIcon}
+          imgSource={repeatStateIcon}
           iconStyle={[styles.smallIcon, styles.flipped]}
         />
         <IconButton
