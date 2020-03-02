@@ -2,20 +2,24 @@ import React from 'react';
 import {TouchableOpacity, View, Image, StyleSheet} from 'react-native';
 
 type BubbleProps = {
+  paused: boolean;
   toggle: (e: Event) => void;
   togglePlaylist: (e: Event) => void;
 };
 
 const fxImage = require('./icons/fx.png');
+const fxImageToggled = require('./icons/fx_toggled.png');
 
-const Bubble = ({toggle, togglePlaylist}: BubbleProps) => {
+const Bubble = ({toggle, togglePlaylist, paused}: BubbleProps) => {
+  const fxIcon = paused ? fxImage : fxImageToggled;
+
   return (
     <View style={styles.wrap}>
       <TouchableOpacity
         onPress={toggle}
         onLongPress={togglePlaylist}
         style={styles.bubble}>
-        <Image style={styles.image} source={fxImage} />
+        <Image style={styles.image} source={fxIcon} />
       </TouchableOpacity>
     </View>
   );

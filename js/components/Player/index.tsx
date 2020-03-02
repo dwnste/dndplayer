@@ -71,7 +71,13 @@ const Player = ({
           onToggleRepeat={onToggleRepeat}
         />
       )}
-      {bubbleUi && <Bubble toggle={toggle} togglePlaylist={onTogglePlaylist} />}
+      {bubbleUi && (
+        <Bubble
+          paused={paused}
+          toggle={toggle}
+          togglePlaylist={onTogglePlaylist}
+        />
+      )}
       {file && (
         <Video
           audioOnly

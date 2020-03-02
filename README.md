@@ -16,6 +16,5 @@ Use `yarn start` to run Metro bundler and `yarn android` to build the app and ru
 4. Edit the username string in `pass` definition which is in `./android/app/build.gradle`
 5. And that's basically it, now just run `yarn bundle:android` or `yarn build:android` for `.aab` and `.apk` respectively
 
-Bootstrapped with [React Native Typescript template](https://github.com/react-native-community/react-native-template-typescript)
-
+Bootstrapped with [React Native Typescript template](https://github.com/react-native-community/react-native-template-typescript)  
 Icons are [Material Icons](https://material.io/resources/icons/?style=baseline)
