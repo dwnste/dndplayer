@@ -11,6 +11,8 @@ import {useObserver} from 'mobx-react-lite';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StackParamList} from '../../App';
 
+import {SCREENS} from '../../consts/screens';
+
 const settingsIcon = require('./icon.png');
 
 type MainScreenNavigationProp = StackNavigationProp<StackParamList, 'Main'>;
@@ -57,7 +59,7 @@ const Main = ({navigation}: MainProps): JSX.Element => {
   };
 
   const goToSettings = (): void => {
-    navigation.navigate('Settings');
+    navigation.navigate(SCREENS.settings);
   };
 
   return useObserver(() => (
