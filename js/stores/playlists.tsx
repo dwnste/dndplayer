@@ -28,17 +28,21 @@ class PlaylistsStore implements PlaylistsStoreInterface {
   };
 
   @action
-  setCurrentMusic = (file: ReadDirItem): void => {
+  setCurrentMusic = (file: ReadDirItem | null): void => {
     this.currentMusic = file;
   };
 
   @action
-  setCurrentFx = (file: ReadDirItem): void => {
+  setCurrentFx = (file: ReadDirItem | null): void => {
     this.currentFx = file;
   };
 
   @action
   nextMusic = (): void => {
+    if (!this.musicPlaylist.length) {
+      return;
+    }
+
     const index = this.musicPlaylist.findIndex(
       ({path}) => path === this.currentMusic?.path,
     );
@@ -50,6 +54,10 @@ class PlaylistsStore implements PlaylistsStoreInterface {
 
   @action
   previousMusic = (): void => {
+    if (!this.fxPlaylist.length) {
+      return;
+    }
+
     const index = this.musicPlaylist.findIndex(
       ({path}) => path === this.currentMusic?.path,
     );

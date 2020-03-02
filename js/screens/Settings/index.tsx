@@ -7,6 +7,9 @@ import ExplorerModal from './components/ExplorerModal';
 
 import {useStores} from '../../hooks';
 
+import {filterAudioFiles} from '../../utils/filesfilter';
+import {list} from '../../utils/filesystem';
+
 import {SCREENS} from '../../consts/screens';
 
 import {ExternalStorageDirectoryPath, ReadDirItem} from 'react-native-fs';
@@ -81,14 +84,15 @@ const Settings = ({navigation}: SettingsProps) => {
   const setFxDir = async (item: ReadDirItem): Promise<void> => {
     try {
       await settingsStore.setFXDir(item);
-      const filteredFxList = settingsStore.explorers.fx.items.filter(file =>
-        file.isFile(),
+
+      const filteredFxList = filterAudioFiles(
+        await list(settingsStore.paths.fx),
       );
       playlistsStore.setPlaylistForFx(filteredFxList);
 
-      if (!playlistsStore.currentFx && filteredFxList.length) {
-        playlistsStore.setCurrentFx(playlistsStore.fxPlaylist[0]);
-      }
+      const currentTrack =
+        filteredFxList.length > 0 ? playlistsStore.fxPlaylist[0] : null;
+      playlistsStore.setCurrentFx(currentTrack);
     } catch {}
 
     toggleFxModal();
@@ -97,14 +101,17 @@ const Settings = ({navigation}: SettingsProps) => {
   const setMusicDir = async (item: ReadDirItem): Promise<void> => {
     try {
       await settingsStore.setMusicDir(item);
-      const filteredMusicList = settingsStore.explorers.music.items.filter(
-        file => file.isFile(),
+
+      const filteredMusicList = filterAudioFiles(
+        await list(settingsStore.paths.music),
       );
+
       playlistsStore.setPlaylistForMusic(filteredMusicList);
 
-      if (!playlistsStore.currentMusic && filteredMusicList.length) {
-        playlistsStore.setCurrentMusic(playlistsStore.musicPlaylist[0]);
-      }
+      const currentTrack =
+        filteredMusicList.length > 0 ? playlistsStore.musicPlaylist[0] : null;
+
+      playlistsStore.setCurrentMusic(currentTrack);
     } catch {}
 
     toggleMusicModal();

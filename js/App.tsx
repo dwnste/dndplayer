@@ -13,6 +13,7 @@ import {configure} from 'mobx';
 import Settings from './screens/Settings';
 import Main from './screens/Main';
 
+import {filterAudioFiles} from './utils/filesfilter';
 import {requestExternalStorageReading} from './utils/permissions';
 
 import {useStores} from './hooks';
@@ -57,11 +58,11 @@ const App = (): JSX.Element => {
           settingsStore.updateMusicExplorer(settingsStore.paths.music),
         ]);
 
-        const filteredMusicList = settingsStore.explorers.music.items.filter(
-          file => file.isFile(),
+        const filteredMusicList = filterAudioFiles(
+          settingsStore.explorers.music.items,
         );
-        const filteredFxList = settingsStore.explorers.fx.items.filter(file =>
-          file.isFile(),
+        const filteredFxList = filterAudioFiles(
+          settingsStore.explorers.fx.items,
         );
 
         playlistsStore.setPlaylistForMusic(filteredMusicList);
