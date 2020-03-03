@@ -80,7 +80,7 @@ const Main = ({navigation}: MainProps): JSX.Element => {
   };
 
   const onSelectFxFromPlaylist = (item: ReadDirItem): void => {
-    playlistsStore.setCurrentMusic(item);
+    playlistsStore.setCurrentFx(item);
   };
 
   return useObserver(() => (
