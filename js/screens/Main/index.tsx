@@ -103,6 +103,7 @@ const Main = ({navigation}: MainProps): JSX.Element => {
           onTogglePlaylist={onToggleFxPlaylist}
         />
         <View style={styles.volumeWrap}>
+          {/* TODO: Add `mute` button */}
           <Slider onChange={setFxVolume} />
           <Slider onChange={setMusicVolume} />
         </View>
