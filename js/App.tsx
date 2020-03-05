@@ -53,6 +53,7 @@ const App = (): JSX.Element => {
       try {
         await settingsStore.setPaths();
 
+        // TODO: move this to settings screen
         await Promise.all([
           settingsStore.updateFXExplorer(settingsStore.paths.fx),
           settingsStore.updateMusicExplorer(settingsStore.paths.music),
