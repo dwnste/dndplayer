@@ -119,20 +119,6 @@ def jscFlavor = 'org.webkit:android-jsc:+'
  */
 def enableHermes = project.ext.react.get("enableHermes", false);
 
-def getPassword(String currentUser, String keyChain) {
-    def stdout = new ByteArrayOutputStream()
-    def stderr = new ByteArrayOutputStream()
-    exec {
-        commandLine 'security', '-q', 'find-generic-password', '-a', currentUser, '-s', keyChain, '-w'
-        standardOutput = stdout
-        errorOutput = stderr
-        ignoreExitValue true
-    }
-    stdout.toString().trim()
-}
-
-def pass = getPassword("lomovitsky","android_keystore")
-
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -167,9 +153,9 @@ android {
         release {
             if (project.hasProperty('DNDPLAYER_UPLOAD_STORE_FILE')) {
                 storeFile file(DNDPLAYER_UPLOAD_STORE_FILE)
-                storePassword pass
+                storePassword DNDPLAYER_UPLOAD_STORE_PASSWORD
                 keyAlias DNDPLAYER_UPLOAD_KEY_ALIAS
-                keyPassword pass
+                keyPassword DNDPLAYER_UPLOAD_KEY_PASSWORD
             }
         }
     }
