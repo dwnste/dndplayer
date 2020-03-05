@@ -44,7 +44,7 @@ const App = (): JSX.Element => {
 
   useEffect(() => {
     requestExternalStorageReading();
-  });
+  }, []);
 
   useLayoutEffect(() => {
     const init = async () => {
@@ -68,11 +68,11 @@ const App = (): JSX.Element => {
         playlistsStore.setPlaylistForMusic(filteredMusicList);
         playlistsStore.setPlaylistForFx(filteredFxList);
 
-        if (!playlistsStore.currentMusic && filteredMusicList.length) {
+        if (filteredMusicList.length > 0) {
           playlistsStore.setCurrentMusic(playlistsStore.musicPlaylist[0]);
         }
 
-        if (!playlistsStore.currentFx && filteredFxList.length) {
+        if (filteredFxList.length > 0) {
           playlistsStore.setCurrentFx(playlistsStore.fxPlaylist[0]);
         }
       } catch {}
