@@ -90,10 +90,10 @@ const App = (): JSX.Element => {
   return (
     <View style={styles.wrap}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName={SCREENS.main} headerMode="none">
-          <Stack.Screen name={SCREENS.main} component={Main} />
+        <Stack.Navigator initialRouteName={SCREENS.Main} headerMode="none">
+          <Stack.Screen name={SCREENS.Main} component={Main} />
           <Stack.Screen
-            name={SCREENS.settings}
+            name={SCREENS.Settings}
             component={Settings}
             options={{cardStyleInterpolator}}
           />

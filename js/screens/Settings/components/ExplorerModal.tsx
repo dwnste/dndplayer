@@ -8,7 +8,7 @@ import {ReadDirItem} from 'react-native-fs';
 type ExplorerModalProps = {
   items: ReadDirItem[];
   visible: boolean;
-  toggle: (e: Event) => void;
+  toggle: (e?: Event) => void;
   setDir: (item: ReadDirItem) => any;
   openDir: (item: ReadDirItem) => any;
   onPressBack: () => void;

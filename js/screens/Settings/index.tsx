@@ -118,7 +118,7 @@ const Settings = ({navigation}: SettingsProps) => {
   };
 
   const goToMain = (): void => {
-    navigation.navigate(SCREENS.main);
+    navigation.navigate(SCREENS.Main);
   };
 
   const renderContent = (): JSX.Element | null => {

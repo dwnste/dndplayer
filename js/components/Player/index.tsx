@@ -1,12 +1,11 @@
 import React, {useState, useRef} from 'react';
 import {View, GestureResponderEvent} from 'react-native';
 
-import Video from 'react-native-video';
+import Video, {OnLoadData, OnProgressData} from 'react-native-video';
+import {ReadDirItem} from 'react-native-fs';
 
 import Controls from './controls';
 import Bubble from './bubble';
-
-import {ReadDirItem} from 'react-native-fs';
 
 type PlayerProps = {
   repeat?: boolean;
@@ -55,6 +54,14 @@ const Player = ({
     });
   };
 
+  const onLoad = ({duration}: OnLoadData): void => {
+    setDuration(duration);
+  };
+
+  const onProgress = ({seekableDuration, currentTime}: OnProgressData) => {
+    setProgress((currentTime * 100) / seekableDuration);
+  };
+
   return (
     <>
       {ui && (
@@ -88,12 +95,8 @@ const Player = ({
           volume={volume}
           source={{uri: file?.path}}
           ref={playerRef}
-          onLoad={({duration}) => {
-            setDuration(duration);
-          }}
-          onProgress={({seekableDuration, currentTime}) => {
-            setProgress((currentTime * 100) / seekableDuration);
-          }}
+          onLoad={onLoad}
+          onProgress={onProgress}
           onEnd={onEnd}
         />
       )}

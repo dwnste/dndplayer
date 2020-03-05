@@ -1,9 +1,9 @@
 import React from 'react';
 import {FlatList, View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
-import {generateKey} from '../../utils/keygenerator';
-
 import {ReadDirItem} from 'react-native-fs';
+
+import {generateKey} from '../../utils/keygenerator';
 
 type PlaylistProps = {
   list: ReadDirItem[];

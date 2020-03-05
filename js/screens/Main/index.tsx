@@ -64,7 +64,7 @@ const Main = ({navigation}: MainProps): JSX.Element => {
   };
 
   const goToSettings = (): void => {
-    navigation.navigate(SCREENS.settings);
+    navigation.navigate(SCREENS.Settings);
   };
 
   const onToggleMusicPlaylist = (): void => {

@@ -4,12 +4,16 @@ import {Modal as RNModal, StyleSheet, View, Button} from 'react-native';
 type ModalProps = {
   visible: boolean;
   children: JSX.Element;
-  onClose: (e: Event) => void;
+  onClose: (e?: Event) => void;
 };
 
 const Modal = ({children, onClose, visible}: ModalProps) => {
   return (
-    <RNModal transparent visible={visible} animationType="fade">
+    <RNModal
+      transparent
+      visible={visible}
+      animationType="fade"
+      onRequestClose={onClose}>
       <View style={styles.overlay}>
         <View style={styles.wrap}>
           {children}

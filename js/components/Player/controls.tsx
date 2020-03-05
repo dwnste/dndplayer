@@ -66,7 +66,7 @@ const Controls = ({
 
   return (
     <View style={styles.wrap}>
-      <TouchableWithoutFeedback onPress={e => onSeek(e)}>
+      <TouchableWithoutFeedback onPress={onSeek}>
         <View ref={progressRef} style={styles.progress}>
           <Animated.View style={[[StyleSheet.absoluteFill], barStyles]} />
         </View>

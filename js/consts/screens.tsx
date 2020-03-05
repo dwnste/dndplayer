@@ -1,12 +1,6 @@
-type Screens = 'Main' | 'Settings';
-
-type ScreenType = {
-  [key: string]: Screens;
-};
-
-const SCREENS: ScreenType = {
-  main: 'Main',
-  settings: 'Settings',
-};
+enum SCREENS {
+  Main = 'Main',
+  Settings = 'Settings',
+}
 
 export {SCREENS};
