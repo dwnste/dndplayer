@@ -7,6 +7,8 @@ import Slider from '../../components/Slider';
 import Modal from '../../components/Modal';
 import Playlist from '../../components/Playlist';
 
+import {Settings} from '../../components/Icons';
+
 import {useStores} from '../../hooks';
 import {useObserver} from 'mobx-react-lite';
 
@@ -16,9 +18,6 @@ import {StackParamList} from '../../App';
 
 import {SCREENS} from '../../consts/screens';
 import {COLORS} from '../../consts/colors';
-
-// TODO: replace with material icon, svg/component
-const settingsIcon = require('./icon.png');
 
 type MainScreenNavigationProp = StackNavigationProp<StackParamList, 'Main'>;
 
@@ -88,11 +87,9 @@ const Main = ({navigation}: MainProps): JSX.Element => {
   return useObserver(() => (
     <View style={styles.wrap}>
       <View style={styles.iconWrap}>
-        <IconButton
-          iconStyle={styles.iconStyle}
-          imgSource={settingsIcon}
-          onPress={goToSettings}
-        />
+        <IconButton onPress={goToSettings}>
+          <Settings width={60} height={60} color={COLORS.icon} />
+        </IconButton>
       </View>
       <View style={styles.playersWrap}>
         <Player
@@ -162,10 +159,6 @@ const styles = StyleSheet.create({
     top: 15,
     right: 15,
     zIndex: 2,
-  },
-  iconStyle: {
-    width: 75,
-    height: 75,
   },
 });
 

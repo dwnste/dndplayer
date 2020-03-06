@@ -1,21 +1,15 @@
 import React from 'react';
-import {
-  TouchableOpacity,
-  Image,
-  ImageSourcePropType,
-  StyleProp,
-  ImageStyle,
-} from 'react-native';
+import {TouchableOpacity, StyleProp, ViewStyle} from 'react-native';
 
 type IconButtonProps = {
   onPress: (ev: Event) => void;
-  imgSource: ImageSourcePropType;
-  iconStyle: StyleProp<ImageStyle>;
+  style?: StyleProp<ViewStyle>;
+  children: JSX.Element;
 };
 
-const IconButton = ({onPress, imgSource, iconStyle}: IconButtonProps) => (
-  <TouchableOpacity onPress={onPress}>
-    <Image style={iconStyle} source={imgSource} />
+const IconButton = ({onPress, style, children}: IconButtonProps) => (
+  <TouchableOpacity style={style || {}} onPress={onPress}>
+    {children}
   </TouchableOpacity>
 );
 

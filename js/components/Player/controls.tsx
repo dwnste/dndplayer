@@ -10,14 +10,7 @@ import {
 import IconButton from '../IconButton';
 
 import {COLORS} from '../../consts/colors';
-
-// TODO: replace with svgs/components
-const playIcon = require('./icons/play.png');
-const pauseIcon = require('./icons/pause.png');
-const rewindIcon = require('./icons/rewind.png');
-const repeatIcon = require('./icons/repeat.png');
-const repeatToggledIcon = require('./icons/repeat_toggled.png');
-const playlistIcon = require('./icons/playlist.png');
+import {Play, Rewind, Playlist, Repeat, Pause} from '../Icons';
 
 type ControlsProps = {
   repeat: boolean;
@@ -59,9 +52,7 @@ const Controls = ({
     }).start();
   }, [progress]);
 
-  const playOrPauseIcon = paused ? playIcon : pauseIcon;
-  const repeatStateIcon = repeat ? repeatToggledIcon : repeatIcon;
-
+  // const playOrPauseIcon = paused ? playIcon : pauseIcon;
   const barStyles = {
     backgroundColor: COLORS.accent,
     width,
@@ -75,31 +66,29 @@ const Controls = ({
         </View>
       </TouchableWithoutFeedback>
       <View style={styles.controlsWrap}>
-        <IconButton
-          onPress={onToggleRepeat}
-          imgSource={repeatStateIcon}
-          iconStyle={[styles.smallIcon, styles.flipped]}
-        />
-        <IconButton
-          onPress={onPrevious}
-          imgSource={rewindIcon}
-          iconStyle={[styles.icon, styles.flipped]}
-        />
-        <IconButton
-          onPress={toggle}
-          imgSource={playOrPauseIcon}
-          iconStyle={styles.icon}
-        />
-        <IconButton
-          onPress={onNext}
-          imgSource={rewindIcon}
-          iconStyle={styles.icon}
-        />
-        <IconButton
-          onPress={onTogglePlaylist}
-          imgSource={playlistIcon}
-          iconStyle={[styles.smallIcon, styles.flipped]}
-        />
+        <IconButton onPress={onToggleRepeat}>
+          <Repeat
+            width={35}
+            height={35}
+            color={repeat ? COLORS.accent : COLORS.icon}
+          />
+        </IconButton>
+        <IconButton onPress={onPrevious}>
+          <Rewind flipHorizontal width={50} height={50} color={COLORS.icon} />
+        </IconButton>
+        <IconButton onPress={toggle}>
+          {paused ? (
+            <Play width={50} height={50} color={COLORS.icon} />
+          ) : (
+            <Pause width={50} height={50} color={COLORS.icon} />
+          )}
+        </IconButton>
+        <IconButton onPress={onNext}>
+          <Rewind width={50} height={50} color={COLORS.icon} />
+        </IconButton>
+        <IconButton onPress={onTogglePlaylist}>
+          <Playlist width={35} height={35} color={COLORS.icon} />
+        </IconButton>
       </View>
     </View>
   );
@@ -120,14 +109,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-  },
-  icon: {
-    width: 50,
-    height: 50,
-  },
-  smallIcon: {
-    width: 30,
-    height: 30,
   },
   flipped: {
     transform: [

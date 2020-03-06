@@ -5,6 +5,7 @@ const COLORS = {
   accent: '#157dfb',
   secondary: '#c2c2c2',
   text: '#cccccd',
+  icon: '#858585',
 };
 
 export {COLORS};
