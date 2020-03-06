@@ -3,6 +3,8 @@ import {View, Text, TouchableOpacity, StyleSheet, Button} from 'react-native';
 
 import {ReadDirItem} from 'react-native-fs';
 
+import {COLORS} from '../../../consts/colors';
+
 type ExplorerItemProps = {
   item: ReadDirItem;
   onSelect: (item: ReadDirItem) => void;
@@ -44,6 +46,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
+    color: COLORS.text,
   },
 });
 

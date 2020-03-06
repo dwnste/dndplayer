@@ -1,6 +1,8 @@
 import React from 'react';
 import {Modal as RNModal, StyleSheet, View, Button} from 'react-native';
 
+import {COLORS} from '../../consts/colors';
+
 type ModalProps = {
   visible: boolean;
   children: JSX.Element;
@@ -29,11 +31,11 @@ const Modal = ({children, onClose, visible}: ModalProps) => {
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.20)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   wrap: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.background,
     borderRadius: 15,
 
     paddingTop: 20,

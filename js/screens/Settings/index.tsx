@@ -13,6 +13,7 @@ import {filterAudioFiles} from '../../utils/filesfilter';
 import {list} from '../../utils/filesystem';
 
 import {SCREENS} from '../../consts/screens';
+import {COLORS} from '../../consts/colors';
 
 import {ExternalStorageDirectoryPath, ReadDirItem} from 'react-native-fs';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -205,12 +206,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderBottomColor: 'rgba(0, 0, 0, 0.1)',
+    borderBottomColor: COLORS.text,
     borderBottomWidth: 1,
     paddingBottom: 10,
   },
   version: {
     fontSize: 20,
+    color: COLORS.text,
   },
   versionNumber: {
     fontWeight: 'bold',
@@ -218,6 +220,7 @@ const styles = StyleSheet.create({
   wrap: {
     flex: 1,
     padding: 20,
+    backgroundColor: COLORS.background,
   },
   item: {
     paddingTop: 20,

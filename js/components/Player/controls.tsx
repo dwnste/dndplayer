@@ -9,6 +9,9 @@ import {
 
 import IconButton from '../IconButton';
 
+import {COLORS} from '../../consts/colors';
+
+// TODO: replace with svgs/components
 const playIcon = require('./icons/play.png');
 const pauseIcon = require('./icons/pause.png');
 const rewindIcon = require('./icons/rewind.png');
@@ -60,7 +63,7 @@ const Controls = ({
   const repeatStateIcon = repeat ? repeatToggledIcon : repeatIcon;
 
   const barStyles = {
-    backgroundColor: 'rgb(21, 126, 251)',
+    backgroundColor: COLORS.accent,
     width,
   };
 
@@ -104,14 +107,14 @@ const Controls = ({
 
 const styles = StyleSheet.create({
   wrap: {
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    backgroundColor: COLORS.lighterBackground,
     paddingBottom: 10,
   },
   progress: {
     marginBottom: 10,
     height: 20,
     width: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    backgroundColor: COLORS.lightestBackground,
   },
   controlsWrap: {
     flexDirection: 'row',

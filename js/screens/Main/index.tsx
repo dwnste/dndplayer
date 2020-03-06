@@ -15,7 +15,9 @@ import {ReadDirItem} from 'react-native-fs';
 import {StackParamList} from '../../App';
 
 import {SCREENS} from '../../consts/screens';
+import {COLORS} from '../../consts/colors';
 
+// TODO: replace with material icon, svg/component
 const settingsIcon = require('./icon.png');
 
 type MainScreenNavigationProp = StackNavigationProp<StackParamList, 'Main'>;
@@ -143,7 +145,7 @@ const styles = StyleSheet.create({
   wrap: {
     position: 'relative',
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.background,
   },
   volumeWrap: {
     flexDirection: 'row',

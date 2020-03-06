@@ -5,6 +5,8 @@ import Modal from '../../../components/Modal';
 
 import {formatDateString} from '../../../utils/date';
 
+import {COLORS} from '../../../consts/colors';
+
 type VersionModalProps = {
   description: string;
   downloadLink: string;
@@ -36,7 +38,6 @@ const VersionModal = ({
           <Text style={[styles.text, styles.versionNumber]}>{version}</Text>
         </View>
         <View style={styles.section}>
-          <Text style={styles.text}>Description: </Text>
           <Text style={styles.description}>{description}</Text>
         </View>
         <View style={styles.dateWrap}>
@@ -56,11 +57,13 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
+    color: COLORS.text,
   },
   date: {
-    color: 'rgba(0, 0, 0, 0.6)',
+    color: COLORS.text,
     fontSize: 17,
     textAlign: 'right',
+    opacity: 0.7,
   },
   dateWrap: {
     marginTop: 10,
@@ -69,14 +72,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   description: {
-    marginTop: 10,
-    fontSize: 17,
+    fontSize: 18,
+    color: COLORS.text,
   },
   section: {
     paddingTop: 10,
     paddingBottom: 10,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 0, 0, 0.1)',
+    borderBottomColor: COLORS.text,
   },
   buttonWrap: {
     marginTop: 20,

@@ -1,17 +1,21 @@
 import React from 'react';
 import {TouchableOpacity, View, Image, StyleSheet} from 'react-native';
 
+import {COLORS} from '../../consts/colors';
+
+// TODO: replace with svg/component
+const fxImage = require('./icons/fx.png');
+
 type BubbleProps = {
   paused: boolean;
   toggle: (e: Event) => void;
   togglePlaylist: (e: Event) => void;
 };
 
-const fxImage = require('./icons/fx.png');
-const fxImageToggled = require('./icons/fx_toggled.png');
-
 const Bubble = ({toggle, togglePlaylist, paused}: BubbleProps) => {
-  const fxIcon = paused ? fxImage : fxImageToggled;
+  const fxOpacityStyle = {
+    opacity: paused ? 0.3 : 1,
+  };
 
   return (
     <View style={styles.wrap}>
@@ -19,7 +23,7 @@ const Bubble = ({toggle, togglePlaylist, paused}: BubbleProps) => {
         onPress={toggle}
         onLongPress={togglePlaylist}
         style={styles.bubble}>
-        <Image style={styles.image} source={fxIcon} />
+        <Image style={[styles.image, fxOpacityStyle]} source={fxImage} />
       </TouchableOpacity>
     </View>
   );
@@ -34,7 +38,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     borderRadius: 100,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    backgroundColor: COLORS.lighterBackground,
     justifyContent: 'center',
     alignItems: 'center',
   },

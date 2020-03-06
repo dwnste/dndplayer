@@ -107,7 +107,6 @@ const App = (): JSX.Element => {
 const styles = StyleSheet.create({
   wrap: {
     flex: 1,
-    backgroundColor: '#fff',
   },
 });
 

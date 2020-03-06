@@ -2,6 +2,8 @@ import React from 'react';
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import {ExternalStorageDirectoryPath} from 'react-native-fs';
 
+import {COLORS} from '../../../consts/colors';
+
 type FolderProps = {
   name: string;
   onPress: (e: Event) => void | Promise<void>;
@@ -36,9 +38,11 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 20,
+    color: COLORS.text,
   },
   path: {
     fontSize: 20,
+    color: COLORS.text,
   },
 });
 

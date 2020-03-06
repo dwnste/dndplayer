@@ -5,6 +5,8 @@ import {ReadDirItem} from 'react-native-fs';
 
 import {generateKey} from '../../utils/keygenerator';
 
+import {COLORS} from '../../consts/colors';
+
 type PlaylistProps = {
   list: ReadDirItem[];
   currentItem: ReadDirItem | null;
@@ -21,10 +23,8 @@ const PlaylistItem = ({
   onSelect: Function;
 }) => (
   <TouchableOpacity style={styles.item} onPress={() => onSelect(item)}>
-    <View>
-      <Text style={styles.itemTitle}>{item.name}</Text>
-      {isPlayingNow && <Text>↑ is playing now</Text>}
-    </View>
+    <Text style={styles.itemTitle}>{item.name}</Text>
+    {isPlayingNow && <Text style={styles.current}>↑ is playing now</Text>}
   </TouchableOpacity>
 );
 
@@ -51,11 +51,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   item: {
-    height: 30,
-    marginBottom: 15,
+    flexDirection: 'column',
+    marginBottom: 10,
+  },
+  current: {
+    fontSize: 15,
+    color: COLORS.text,
   },
   itemTitle: {
     fontSize: 20,
+    color: COLORS.text,
   },
 });
 
