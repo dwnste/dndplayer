@@ -18,6 +18,7 @@ const DEFAULT_VERSION: VersionType = {
   availableVersion: '',
   description: '',
   downloadLink: '',
+  publishedAt: '',
   error: false,
 };
 
@@ -42,6 +43,7 @@ type VersionType = {
   availableVersion: string;
   downloadLink: string;
   description: string;
+  publishedAt: string;
   error: boolean;
 };
 
@@ -170,7 +172,7 @@ class SettingsStore implements SettingsStoreInterface {
     this.version.loading = true;
 
     try {
-      const {assets, tag_name, body}: ReleaseType = yield getLatestVersion();
+      const {assets, tag_name, body, published_at}: ReleaseType = yield getLatestVersion();
 
       const downloadLink: string =
         assets?.find(
@@ -184,6 +186,7 @@ class SettingsStore implements SettingsStoreInterface {
         error: false,
         availableVersion: tag_name,
         description: body,
+        publishedAt: published_at,
         downloadLink,
       };
     } catch {

@@ -183,6 +183,7 @@ const Settings = ({navigation}: SettingsProps) => {
           onPressBack={handlePressBackForMusicDir}
         />
         <VersionModal
+          publishedAt={settingsStore.version.publishedAt}
           version={settingsStore.version.availableVersion}
           downloadLink={settingsStore.version.downloadLink}
           description={settingsStore.version.description}

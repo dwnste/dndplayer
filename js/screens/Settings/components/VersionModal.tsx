@@ -3,10 +3,13 @@ import {Text, Button, Linking, View, StyleSheet} from 'react-native';
 
 import Modal from '../../../components/Modal';
 
+import {formatDateString} from '../../../utils/date';
+
 type VersionModalProps = {
   description: string;
   downloadLink: string;
   version: string;
+  publishedAt: string;
   visible: boolean;
   onClose: (e?: Event) => void;
 };
@@ -17,10 +20,13 @@ const VersionModal = ({
   version,
   downloadLink,
   description,
+  publishedAt,
 }: VersionModalProps) => {
   const openUrl = () => {
     Linking.openURL(downloadLink);
   };
+
+  const dateString = formatDateString(publishedAt);
 
   return (
     <Modal visible={visible} onClose={onClose}>
@@ -31,7 +37,10 @@ const VersionModal = ({
         </View>
         <View style={styles.section}>
           <Text style={styles.text}>Description: </Text>
-          <Text style={styles.text}>{description}</Text>
+          <Text style={styles.description}>{description}</Text>
+        </View>
+        <View style={styles.dateWrap}>
+          <Text style={styles.date}>{dateString}</Text>
         </View>
         <View style={styles.buttonWrap}>
           <Button title="Download" onPress={openUrl} />
@@ -48,8 +57,20 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
   },
+  date: {
+    color: 'rgba(0, 0, 0, 0.6)',
+    fontSize: 17,
+    textAlign: 'right',
+  },
+  dateWrap: {
+    marginTop: 10,
+  },
   versionNumber: {
     fontWeight: 'bold',
+  },
+  description: {
+    marginTop: 10,
+    fontSize: 17,
   },
   section: {
     paddingTop: 10,
