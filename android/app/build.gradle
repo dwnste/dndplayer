@@ -151,11 +151,11 @@ android {
         }
 
         release {
-            if (project.hasProperty('DNDPLAYER_UPLOAD_STORE_FILE')) {
+            if (project.hasProperty('DNDPLAYER_UPLOAD_STORE_FILE') && project.hasProperty('DNDPLAYER_UPLOAD_STORE_PASSWORD')) {
                 storeFile file(DNDPLAYER_UPLOAD_STORE_FILE)
-                storePassword DNDPLAYER_UPLOAD_STORE_PASSWORD
+                storePassword DNDPLAYER_UPLOAD_STORE_PASSWORD ?: ''
                 keyAlias DNDPLAYER_UPLOAD_KEY_ALIAS
-                keyPassword DNDPLAYER_UPLOAD_KEY_PASSWORD
+                keyPassword DNDPLAYER_UPLOAD_KEY_PASSWORD ?: ''
             }
         }
     }
