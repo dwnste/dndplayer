@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
-import {SafeAreaView, View, StyleSheet, Button} from 'react-native';
+import {SafeAreaView, View, StyleSheet, Button, Text} from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 import {useObserver} from 'mobx-react-lite';
 
 import Folder from './components/Folder';
 import ExplorerModal from './components/ExplorerModal';
+import VersionModal from './components/VersionModal';
 
 import {useStores} from '../../hooks';
 
@@ -121,6 +123,12 @@ const Settings = ({navigation}: SettingsProps) => {
     navigation.navigate(SCREENS.Main);
   };
 
+  const onCloseVersionModal = (): void => {
+    settingsStore.hideVersionModal();
+  };
+
+  const appVersion = DeviceInfo.getVersion();
+
   const renderContent = (): JSX.Element | null => {
     if (settingsStore.loading) {
       return null;
@@ -130,6 +138,21 @@ const Settings = ({navigation}: SettingsProps) => {
       <SafeAreaView style={styles.wrap}>
         <View style={styles.itemWrap}>
           <View style={styles.menuWrap}>
+            <View style={styles.versionWrap}>
+              <View>
+                <Text style={styles.version}>Current version: </Text>
+                <Text style={[styles.version, styles.versionNumber]}>
+                  {appVersion}
+                </Text>
+              </View>
+              <Button
+                title="Check for updates"
+                disabled={settingsStore.version.loading}
+                onPress={() => {
+                  settingsStore.checkVersion();
+                }}
+              />
+            </View>
             <Folder
               name="FX folder"
               path={settingsStore.paths.fx}
@@ -159,6 +182,13 @@ const Settings = ({navigation}: SettingsProps) => {
           items={settingsStore.explorers.music.items}
           onPressBack={handlePressBackForMusicDir}
         />
+        <VersionModal
+          version={settingsStore.version.availableVersion}
+          downloadLink={settingsStore.version.downloadLink}
+          description={settingsStore.version.description}
+          visible={settingsStore.version.showModal}
+          onClose={onCloseVersionModal}
+        />
       </SafeAreaView>
     );
   };
@@ -169,6 +199,20 @@ const Settings = ({navigation}: SettingsProps) => {
 const styles = StyleSheet.create({
   menuWrap: {
     flexGrow: 1,
+  },
+  versionWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderBottomColor: 'rgba(0, 0, 0, 0.1)',
+    borderBottomWidth: 1,
+    paddingBottom: 10,
+  },
+  version: {
+    fontSize: 20,
+  },
+  versionNumber: {
+    fontWeight: 'bold',
   },
   wrap: {
     flex: 1,

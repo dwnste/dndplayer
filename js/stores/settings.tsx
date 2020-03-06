@@ -3,12 +3,23 @@ import {observable, action, flow} from 'mobx';
 import {get, set} from '../utils/storage';
 import {list} from '../utils/filesystem';
 
+import {getLatestVersion, ReleaseType} from '../api';
+
 import {CancellablePromise} from 'mobx/lib/api/flow';
 import {ReadDirItem} from 'react-native-fs';
 
 const FX_DIR_NAME = 'fx_dir';
 const MUSIC_DIR_NAME = 'music_dir';
 const DEFAULT_PATH = '';
+
+const DEFAULT_VERSION: VersionType = {
+  loading: false,
+  showModal: false,
+  availableVersion: '',
+  description: '',
+  downloadLink: '',
+  error: false,
+};
 
 type PathsType = {
   fx: string;
@@ -25,10 +36,21 @@ type ExplorersType = {
   music: ExplorerType;
 };
 
+type VersionType = {
+  loading: boolean;
+  showModal: boolean;
+  availableVersion: string;
+  downloadLink: string;
+  description: string;
+  error: boolean;
+};
+
 export interface SettingsStoreInterface {
   loading: boolean;
   paths: PathsType;
   explorers: ExplorersType;
+  version: VersionType;
+  checkVersion(): CancellablePromise<unknown>;
   reset(): void;
   setLoading(value: boolean): void;
   updateFXExplorer(path: string): CancellablePromise<unknown>;
@@ -60,6 +82,8 @@ class SettingsStore implements SettingsStoreInterface {
       items: [],
     },
   };
+
+  @observable version: VersionType = DEFAULT_VERSION;
 
   @action
   setLoading = (value: boolean = false) => {
@@ -142,6 +166,41 @@ class SettingsStore implements SettingsStoreInterface {
     this.paths.music = path || '';
   });
 
+  checkVersion = flow(function*(this: SettingsStoreInterface) {
+    this.version.loading = true;
+
+    try {
+      const {assets, tag_name, body}: ReleaseType = yield getLatestVersion();
+
+      const downloadLink: string =
+        assets?.find(
+          ({content_type}) =>
+            content_type === 'application/vnd.android.package-archive',
+        )?.browser_download_url || '';
+
+      this.version = {
+        ...this.version,
+        showModal: true,
+        error: false,
+        availableVersion: tag_name,
+        description: body,
+        downloadLink,
+      };
+    } catch {
+      this.version.error = true;
+    }
+
+    this.version.loading = false;
+  });
+
+  @action
+  hideVersionModal = () => {
+    this.version = {
+      ...this.version,
+      showModal: false,
+    };
+  };
+
   setPaths = flow(function*(this: SettingsStoreInterface) {
     yield Promise.all([this.getFXDir(), this.getMusicDir()]);
   });
@@ -160,6 +219,8 @@ class SettingsStore implements SettingsStoreInterface {
         items: [],
       },
     };
+
+    this.version = DEFAULT_VERSION;
   };
 }
 
