@@ -81,4 +81,28 @@ const Settings = ({height, width, color}: IconProps) => {
   );
 };
 
-export {Play, Pause, Rewind, Repeat, Playlist, Settings};
+const Folder = ({height, width, color}: IconProps) => {
+  return (
+    <Svg height={height} width={width} viewBox="0 0 24 24">
+      <Path
+        d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
+        fill={color}
+      />
+      <Path d="M0 0h24v24H0z" fill="none" />
+    </Svg>
+  );
+};
+
+const File = ({height, width, color}: IconProps) => {
+  return (
+    <Svg height={height} width={width} viewBox="0 0 24 24">
+      <Path d="M0 0h24v24H0z" fill="none" />
+      <Path
+        d="M17 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"
+        fill={color}
+      />
+    </Svg>
+  );
+};
+
+export {Play, Pause, Rewind, Repeat, Playlist, Settings, Folder, File};

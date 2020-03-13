@@ -5,6 +5,8 @@ import {ReadDirItem} from 'react-native-fs';
 
 import {generateKey} from '../../utils/keygenerator';
 
+import {Play, Pause} from '../Icons';
+
 import {COLORS} from '../../consts/colors';
 
 type PlaylistProps = {
@@ -23,8 +25,18 @@ const PlaylistItem = ({
   onSelect: Function;
 }) => (
   <TouchableOpacity style={styles.item} onPress={() => onSelect(item)}>
-    <Text style={styles.itemTitle}>{item.name}</Text>
-    {isPlayingNow && <Text style={styles.current}>↑ is playing now</Text>}
+    <View style={styles.titleAndIcon}>
+      <View style={styles.iconWrap}>
+        {isPlayingNow ? (
+          <Pause height={40} width={40} color={COLORS.secondary} />
+        ) : (
+          <Play height={40} width={40} color={COLORS.secondary} />
+        )}
+      </View>
+      <Text numberOfLines={1} ellipsizeMode="tail" style={styles.itemTitle}>
+        {item.name}
+      </Text>
+    </View>
   </TouchableOpacity>
 );
 
@@ -50,17 +62,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  iconWrap: {
+    padding: 5,
+    backgroundColor: COLORS.lighterBackground,
+    borderRadius: 10,
+  },
   item: {
     flexDirection: 'column',
     marginBottom: 10,
   },
-  current: {
-    fontSize: 15,
-    color: COLORS.text,
-  },
   itemTitle: {
+    flex: 1,
     fontSize: 20,
     color: COLORS.text,
+    marginLeft: 10,
+  },
+  titleAndIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 

@@ -77,11 +77,37 @@ const Main = ({navigation}: MainProps): JSX.Element => {
   };
 
   const onSelectMusicFromPlaylist = (item: ReadDirItem): void => {
+    const isCurrentTrack = playlistsStore.currentMusic?.path === item.path;
+
+    if (isCurrentTrack) {
+      toggle();
+      return;
+    }
+
     playlistsStore.setCurrentMusic(item);
+
+    if (!paused) {
+      return;
+    }
+
+    toggle();
   };
 
   const onSelectFxFromPlaylist = (item: ReadDirItem): void => {
+    const isCurrentFx = playlistsStore.currentFx?.path === item.path;
+
+    if (isCurrentFx) {
+      toggleFx();
+      return;
+    }
+
     playlistsStore.setCurrentFx(item);
+
+    if (!fxPaused) {
+      return;
+    }
+
+    toggleFx();
   };
 
   return useObserver(() => (

@@ -3,6 +3,8 @@ import {View, Text, TouchableOpacity, StyleSheet, Button} from 'react-native';
 
 import {ReadDirItem} from 'react-native-fs';
 
+import {Folder, File} from '../../../components/Icons';
+
 import {COLORS} from '../../../consts/colors';
 
 type ExplorerItemProps = {
@@ -18,9 +20,16 @@ const ExplorerItem = ({
   onPress,
   showSelect,
 }: ExplorerItemProps): JSX.Element => (
-  <TouchableOpacity style={styles.wrap2} onPress={() => onPress(item)}>
-    <View style={styles.wrap}>
-      <Text style={styles.text}>{item.name}</Text>
+  <TouchableOpacity style={styles.wrap} onPress={() => onPress(item)}>
+    <View style={styles.titleWrap}>
+      {item.isDirectory() ? (
+        <Folder width={50} height={50} color={COLORS.lighterBackground} />
+      ) : (
+        <File width={50} height={50} color={COLORS.lighterBackground} />
+      )}
+      <Text numberOfLines={1} ellipsizeMode="tail" style={styles.text}>
+        {item.name}
+      </Text>
     </View>
     {showSelect(item) && (
       <Button
@@ -35,18 +44,22 @@ const ExplorerItem = ({
 );
 
 const styles = StyleSheet.create({
-  wrap2: {
+  titleWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  wrap: {
     marginTop: 5,
     marginBottom: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  wrap: {
-    padding: 5,
+    alignItems: 'center',
   },
   text: {
+    flex: 1,
     fontSize: 20,
     color: COLORS.text,
+    marginLeft: 5,
   },
 });
 
