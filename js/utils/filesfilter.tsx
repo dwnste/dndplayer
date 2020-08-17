@@ -1,6 +1,6 @@
 import {ReadDirItem} from 'react-native-fs';
 
-const extensions: Array<string> = ['.mp3', '.wav', '.flac', '.m4u'];
+const extensions: Array<string> = ['.mp3', '.wav', '.flac', '.m4u', '.ogg'];
 
 const filterAudioFiles = (items: ReadDirItem[]): ReadDirItem[] => {
   return items.filter(({isDirectory, name}) => {
