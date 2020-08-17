@@ -47,6 +47,9 @@ const styles = StyleSheet.create({
   titleWrap: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'flex-start',
+    flexGrow: 0,
+    flexShrink: 1,
   },
   wrap: {
     marginTop: 5,
