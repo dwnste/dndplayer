@@ -5,19 +5,21 @@ on:
       - "*"
 jobs:
   build:
-    name: Build dndplayer
+    name: Build and deploy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout the repository
+        uses: actions/checkout@v1
+      - name: Install yarn
+        run: sudo npm install -g yarn
       - name: Install dependencies
-        run: |
-          npm install
+        run: yarn
       - name: Get keystore file
         run: |
           echo ${{ secrets.BASE64_KEYSTORE }} | base64 --decode > ./android/app/dndplayer.keystore
       - name: Build .apk
         run: |
-          cd android && ./gradlew assembleRelease -PDNDPLAYER_UPLOAD_STORE_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}' -PDNDPLAYER_UPLOAD_KEY_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}'
+          cd android && ./gradlew clean && ./gradlew assembleRelease -PDNDPLAYER_UPLOAD_STORE_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}' -PDNDPLAYER_UPLOAD_KEY_PASSWORD='${{ secrets.KEYSTORE_PASSWORD }}'
       - name: Create release
         id: create_release
         uses: actions/create-release@v1.0.0
