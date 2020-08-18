@@ -1,12 +1,7 @@
 import React, {useLayoutEffect, useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
-
 import {NavigationContainer} from '@react-navigation/native';
-import {
-  createStackNavigator,
-  StackCardInterpolationProps,
-  StackCardInterpolatedStyle,
-} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 
 import {configure} from 'mobx';
 
@@ -27,15 +22,6 @@ export type StackParamList = {
 
 // Set mobx
 configure({enforceActions: 'observed'});
-
-// Fade animation for transitions
-const cardStyleInterpolator = ({
-  current,
-}: StackCardInterpolationProps): StackCardInterpolatedStyle => ({
-  cardStyle: {
-    opacity: current.progress,
-  },
-});
 
 const Stack = createStackNavigator<StackParamList>();
 
@@ -88,7 +74,9 @@ const App = (): JSX.Element => {
           <Stack.Screen
             name={SCREENS.Settings}
             component={Settings}
-            options={{cardStyleInterpolator}}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>
