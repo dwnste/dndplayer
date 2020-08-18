@@ -13,7 +13,7 @@ import {configure} from 'mobx';
 import Settings from './screens/Settings';
 import Main from './screens/Main';
 
-import {filterAudioFiles} from './utils/filesfilter';
+import preparePlaylist from './utils/preparePlaylist';
 import {requestExternalStorageReading} from './utils/permissions';
 
 import {useStores} from './hooks';
@@ -59,23 +59,15 @@ const App = (): JSX.Element => {
           settingsStore.updateMusicExplorer(settingsStore.paths.music),
         ]);
 
-        const filteredMusicList = filterAudioFiles(
+        const musicPlaylist = await preparePlaylist(
           settingsStore.explorers.music.items,
         );
-        const filteredFxList = filterAudioFiles(
+        const fxPlaylist = await preparePlaylist(
           settingsStore.explorers.fx.items,
         );
 
-        playlistsStore.setPlaylistForMusic(filteredMusicList);
-        playlistsStore.setPlaylistForFx(filteredFxList);
-
-        if (filteredMusicList.length > 0) {
-          playlistsStore.setCurrentMusic(playlistsStore.musicPlaylist[0]);
-        }
-
-        if (filteredFxList.length > 0) {
-          playlistsStore.setCurrentFx(playlistsStore.fxPlaylist[0]);
-        }
+        playlistsStore.updateMusicPlaylist(musicPlaylist);
+        playlistsStore.updateFxPlaylist(fxPlaylist);
       } catch {}
 
       settingsStore.setLoading(false);

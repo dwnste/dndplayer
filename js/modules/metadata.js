@@ -1,4 +1,5 @@
 import {NativeModules} from 'react-native';
+import {MetadataType} from '../types';
 
 const DEFAULT_METADATA = {
   album: null,
@@ -7,19 +8,12 @@ const DEFAULT_METADATA = {
   title: null,
 };
 
-type MetadataType = {
-  album: ?string,
-  artist: ?string,
-  cover: ?string,
-  title: ?string,
-};
-
 type MetadataModuleType = {
   get: (path: string) => Promise<MetadataType>,
 };
 
 const metadataModule: MetadataModuleType = NativeModules.MetadataModule || {
-  get: (path: string) => Promise.resolve(DEFAULT_METADATA),
+  get: () => Promise.resolve(DEFAULT_METADATA),
 };
 
-export default metadataModule;
+export {metadataModule as default, DEFAULT_METADATA};

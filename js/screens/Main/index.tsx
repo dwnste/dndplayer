@@ -16,8 +16,8 @@ import {useStores} from '../../hooks';
 import {useObserver} from 'mobx-react-lite';
 
 import {StackNavigationProp} from '@react-navigation/stack';
-import {ReadDirItem} from 'react-native-fs';
 import {StackParamList} from '../../App';
+import {AudioFile} from '../../types';
 
 import {SCREENS} from '../../consts/screens';
 import {COLORS} from '../../consts/colors';
@@ -100,7 +100,7 @@ const Main = ({navigation}: MainProps): JSX.Element => {
     setFXPlaylistVisible(!fxPlaylistVisible);
   };
 
-  const onSelectMusicFromPlaylist = (item: ReadDirItem): void => {
+  const onSelectMusicFromPlaylist = (item: AudioFile): void => {
     const isCurrentTrack = playlistsStore.currentMusic?.path === item.path;
 
     if (isCurrentTrack) {
@@ -117,7 +117,7 @@ const Main = ({navigation}: MainProps): JSX.Element => {
     toggle();
   };
 
-  const onSelectFxFromPlaylist = (item: ReadDirItem): void => {
+  const onSelectFxFromPlaylist = (item: AudioFile): void => {
     const isCurrentFx = playlistsStore.currentFx?.path === item.path;
 
     if (isCurrentFx) {

@@ -2,7 +2,8 @@ import React, {useState, useRef} from 'react';
 import {View, GestureResponderEvent} from 'react-native';
 
 import Video, {OnLoadData, OnProgressData} from 'react-native-video';
-import {ReadDirItem} from 'react-native-fs';
+
+import {AudioFile} from '../../types';
 
 import Controls from './controls';
 import Bubble from './bubble';
@@ -11,7 +12,7 @@ type PlayerProps = {
   repeat?: boolean;
   ui?: boolean;
   bubbleUi?: boolean;
-  file: ReadDirItem | null;
+  file: AudioFile | null;
   paused: boolean;
   volume: number;
   toggle: (e: Event) => void;
@@ -93,7 +94,7 @@ const Player = ({
           repeat={repeat}
           paused={paused}
           volume={volume}
-          source={{uri: file?.path}}
+          source={{uri: file.path}}
           ref={playerRef}
           onLoad={onLoad}
           onProgress={onProgress}

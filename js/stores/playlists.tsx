@@ -1,40 +1,62 @@
 import {observable, action} from 'mobx';
 
-import {ReadDirItem} from 'react-native-fs';
+import {AudioFile} from '../types';
 
 export interface PlaylistsStoreInterface {
-  setPlaylistForFx(list: ReadDirItem[]): void;
-  setPlaylistForMusic(list: ReadDirItem[]): void;
-  currentFx: ReadDirItem | null;
-  currentMusic: ReadDirItem | null;
+  setPlaylistForFx(list: AudioFile[]): void;
+  setPlaylistForMusic(list: AudioFile[]): void;
+  currentFx: AudioFile | null;
+  currentMusic: AudioFile | null;
   nextMusic: () => void;
   previousMusic: () => void;
 }
 
 class PlaylistsStore implements PlaylistsStoreInterface {
-  @observable fxPlaylist: ReadDirItem[] = [];
-  @observable musicPlaylist: ReadDirItem[] = [];
-  @observable currentFx: ReadDirItem | null = null;
-  @observable currentMusic: ReadDirItem | null = null;
+  @observable fxPlaylist: AudioFile[] = [];
+  @observable musicPlaylist: AudioFile[] = [];
+  @observable currentFx: AudioFile | null = null;
+  @observable currentMusic: AudioFile | null = null;
 
   @action
-  setPlaylistForFx = (list: ReadDirItem[] = []): void => {
+  setPlaylistForFx = (list: AudioFile[] = []): void => {
     this.fxPlaylist = list;
   };
 
   @action
-  setPlaylistForMusic = (list: ReadDirItem[] = []): void => {
+  setPlaylistForMusic = (list: AudioFile[] = []): void => {
     this.musicPlaylist = list;
   };
 
   @action
-  setCurrentMusic = (file: ReadDirItem | null): void => {
+  setCurrentMusic = (file: AudioFile | null): void => {
     this.currentMusic = file;
   };
 
   @action
-  setCurrentFx = (file: ReadDirItem | null): void => {
+  setCurrentFx = (file: AudioFile | null): void => {
     this.currentFx = file;
+  };
+
+  @action
+  updateMusicPlaylist = (playlist: AudioFile[]): void => {
+    this.setPlaylistForMusic(playlist);
+
+    if (!this.musicPlaylist.length) {
+      return;
+    }
+
+    this.setCurrentMusic(this.musicPlaylist[0]);
+  };
+
+  @action
+  updateFxPlaylist = (playlist: AudioFile[]): void => {
+    this.setPlaylistForFx(playlist);
+
+    if (!this.fxPlaylist.length) {
+      return;
+    }
+
+    this.setCurrentFx(this.fxPlaylist[0]);
   };
 
   @action
@@ -47,9 +69,11 @@ class PlaylistsStore implements PlaylistsStoreInterface {
       ({path}) => path === this.currentMusic?.path,
     );
 
-    const nextIndex = this.musicPlaylist.length === index + 1 ? 0 : index + 1;
+    const nextIndex = index + 1;
 
-    this.setCurrentMusic(this.musicPlaylist[nextIndex]);
+    const newIndex = this.musicPlaylist.length === nextIndex ? 0 : nextIndex;
+
+    this.setCurrentMusic(this.musicPlaylist[newIndex]);
   };
 
   @action
@@ -62,9 +86,13 @@ class PlaylistsStore implements PlaylistsStoreInterface {
       ({path}) => path === this.currentMusic?.path,
     );
 
-    const nextIndex = index === 0 ? this.musicPlaylist.length - 1 : index - 1;
+    const isFirst = index === 0;
+    const lastIndex = this.musicPlaylist.length - 1;
+    const previousIndex = index - 1;
 
-    this.setCurrentMusic(this.musicPlaylist[nextIndex]);
+    const newIndex = isFirst ? lastIndex : previousIndex;
+
+    this.setCurrentMusic(this.musicPlaylist[newIndex]);
   };
 }
 

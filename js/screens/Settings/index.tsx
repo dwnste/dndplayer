@@ -9,7 +9,7 @@ import VersionModal from './components/VersionModal';
 
 import {useStores} from '../../hooks';
 
-import {filterAudioFiles} from '../../utils/filesfilter';
+import preparePlaylist from '../../utils/preparePlaylist';
 import {list} from '../../utils/filesystem';
 
 import {SCREENS} from '../../consts/screens';
@@ -88,14 +88,11 @@ const Settings = ({navigation}: SettingsProps) => {
     try {
       await settingsStore.setFXDir(item);
 
-      const filteredFxList = filterAudioFiles(
+      const fxPlaylist = await preparePlaylist(
         await list(settingsStore.paths.fx),
       );
-      playlistsStore.setPlaylistForFx(filteredFxList);
 
-      const currentTrack =
-        filteredFxList.length > 0 ? playlistsStore.fxPlaylist[0] : null;
-      playlistsStore.setCurrentFx(currentTrack);
+      playlistsStore.updateFxPlaylist(fxPlaylist);
     } catch {}
 
     toggleFxModal();
@@ -105,16 +102,11 @@ const Settings = ({navigation}: SettingsProps) => {
     try {
       await settingsStore.setMusicDir(item);
 
-      const filteredMusicList = filterAudioFiles(
+      const musicPlaylist = await preparePlaylist(
         await list(settingsStore.paths.music),
       );
 
-      playlistsStore.setPlaylistForMusic(filteredMusicList);
-
-      const currentTrack =
-        filteredMusicList.length > 0 ? playlistsStore.musicPlaylist[0] : null;
-
-      playlistsStore.setCurrentMusic(currentTrack);
+      playlistsStore.updateMusicPlaylist(musicPlaylist);
     } catch {}
 
     toggleMusicModal();

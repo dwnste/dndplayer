@@ -1,18 +1,16 @@
 import React from 'react';
 import {FlatList, View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
-import {ReadDirItem} from 'react-native-fs';
-
-import {generateKey} from '../../utils/keygenerator';
+import {AudioFile} from '../../types';
 
 import {Play, Pause} from '../Icons';
 
 import {COLORS} from '../../consts/colors';
 
 type PlaylistProps = {
-  list: ReadDirItem[];
-  currentItem: ReadDirItem | null;
-  onSelect: (item: ReadDirItem) => void;
+  list: AudioFile[];
+  currentItem: AudioFile | null;
+  onSelect: (item: AudioFile) => void;
 };
 
 const PlaylistItem = ({
@@ -20,7 +18,7 @@ const PlaylistItem = ({
   isPlayingNow,
   onSelect,
 }: {
-  item: ReadDirItem;
+  item: AudioFile;
   isPlayingNow: boolean;
   onSelect: Function;
 }) => (
@@ -34,7 +32,7 @@ const PlaylistItem = ({
         )}
       </View>
       <Text numberOfLines={1} ellipsizeMode="tail" style={styles.itemTitle}>
-        {item.name}
+        {item.metadata.title}
       </Text>
     </View>
   </TouchableOpacity>
@@ -45,14 +43,14 @@ const Playlist = ({list, currentItem, onSelect}: PlaylistProps) => {
     <View style={styles.container}>
       <FlatList
         data={list}
-        renderItem={({item}: {item: ReadDirItem}) => (
+        renderItem={({item}: {item: AudioFile}) => (
           <PlaylistItem
             item={item}
             isPlayingNow={item.path === currentItem?.path}
             onSelect={onSelect}
           />
         )}
-        keyExtractor={generateKey}
+        keyExtractor={({path}) => path}
       />
     </View>
   );
