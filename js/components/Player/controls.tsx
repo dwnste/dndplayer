@@ -53,7 +53,6 @@ const Controls = ({
     }).start();
   }, [progress]);
 
-  // const playOrPauseIcon = paused ? playIcon : pauseIcon;
   const barStyles = {
     backgroundColor: COLORS.accent,
     width,
