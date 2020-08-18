@@ -1,5 +1,6 @@
 apply plugin: "com.android.application"
 
+import groovy.json.JsonSlurper
 import com.android.build.OutputFile
 
 /**
@@ -119,6 +120,13 @@ def jscFlavor = 'org.webkit:android-jsc:+'
  */
 def enableHermes = project.ext.react.get("enableHermes", false);
 
+def getPackageVersion() {
+    def packageSlurper = new JsonSlurper()
+    def packageJson = packageSlurper.parse file("$rootDir/../package.json")
+
+    return packageJson.version
+}
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -132,7 +140,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "0.0.6"
+        versionName getPackageVersion()
     }
     splits {
         abi {
