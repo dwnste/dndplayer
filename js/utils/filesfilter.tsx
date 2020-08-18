@@ -16,7 +16,7 @@ const filterAudioFiles = (items: ReadDirItem[]): ReadDirItem[] => {
 
     const currentExtension = name.slice(lastIndexOfDot);
 
-    return extensions.some(extension => currentExtension === extension);
+    return extensions.some((extension) => currentExtension === extension);
   });
 };
 

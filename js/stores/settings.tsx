@@ -92,7 +92,7 @@ class SettingsStore implements SettingsStoreInterface {
     this.loading = value;
   };
 
-  setFXDir = flow(function*(this: SettingsStoreInterface, item: ReadDirItem) {
+  setFXDir = flow(function* (this: SettingsStoreInterface, item: ReadDirItem) {
     if (!item.isDirectory()) {
       return;
     }
@@ -101,7 +101,7 @@ class SettingsStore implements SettingsStoreInterface {
     this.paths.fx = item.path;
   });
 
-  setMusicDir = flow(function*(
+  setMusicDir = flow(function* (
     this: SettingsStoreInterface,
     item: ReadDirItem,
   ) {
@@ -110,7 +110,7 @@ class SettingsStore implements SettingsStoreInterface {
     this.paths.music = item.path;
   });
 
-  updateFXExplorer = flow(function*(
+  updateFXExplorer = flow(function* (
     this: SettingsStoreInterface,
     path: string,
   ) {
@@ -134,7 +134,7 @@ class SettingsStore implements SettingsStoreInterface {
     }
   });
 
-  updateMusicExplorer = flow(function*(
+  updateMusicExplorer = flow(function* (
     this: SettingsStoreInterface,
     path: string,
   ) {
@@ -158,21 +158,26 @@ class SettingsStore implements SettingsStoreInterface {
     }
   });
 
-  getFXDir = flow(function*(this: SettingsStoreInterface) {
+  getFXDir = flow(function* (this: SettingsStoreInterface) {
     const path = yield get(FX_DIR_NAME);
     this.paths.fx = path || '';
   });
 
-  getMusicDir = flow(function*(this: SettingsStoreInterface) {
+  getMusicDir = flow(function* (this: SettingsStoreInterface) {
     const path = yield get(MUSIC_DIR_NAME);
     this.paths.music = path || '';
   });
 
-  checkVersion = flow(function*(this: SettingsStoreInterface) {
+  checkVersion = flow(function* (this: SettingsStoreInterface) {
     this.version.loading = true;
 
     try {
-      const {assets, tag_name, body, published_at}: ReleaseType = yield getLatestVersion();
+      const {
+        assets,
+        tag_name,
+        body,
+        published_at,
+      }: ReleaseType = yield getLatestVersion();
 
       const downloadLink: string =
         assets?.find(
@@ -204,7 +209,7 @@ class SettingsStore implements SettingsStoreInterface {
     };
   };
 
-  setPaths = flow(function*(this: SettingsStoreInterface) {
+  setPaths = flow(function* (this: SettingsStoreInterface) {
     yield Promise.all([this.getFXDir(), this.getMusicDir()]);
   });
 

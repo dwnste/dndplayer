@@ -34,7 +34,7 @@ const ExplorerItem = ({
     {showSelect(item) && (
       <Button
         title="Select"
-        onPress={e => {
+        onPress={(e) => {
           e.stopPropagation();
           onSelect(item);
         }}

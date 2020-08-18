@@ -17,7 +17,7 @@ type AssetType = {
 };
 
 const getJson = (url: string): Promise<any> =>
-  fetch(url).then(res => res.json());
+  fetch(url).then((res) => res.json());
 
 const getLatestVersion = (): Promise<ReleaseType> => getJson(LATEST_RELEASE);
 

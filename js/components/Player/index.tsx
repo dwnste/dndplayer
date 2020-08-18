@@ -54,8 +54,8 @@ const Player = ({
     });
   };
 
-  const onLoad = ({duration}: OnLoadData): void => {
-    setDuration(duration);
+  const onLoad = ({duration: currentDuration}: OnLoadData): void => {
+    setDuration(currentDuration);
   };
 
   const onProgress = ({seekableDuration, currentTime}: OnProgressData) => {
