@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.lighterBackground,
     justifyContent: 'center',
     alignItems: 'center',
+    opacity: 0.7,
   },
   image: {
     width: 100,

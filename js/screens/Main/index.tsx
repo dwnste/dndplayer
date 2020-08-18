@@ -9,6 +9,7 @@ import Player from '../../components/Player';
 import Slider from '../../components/Slider';
 import Modal from '../../components/Modal';
 import Playlist from '../../components/Playlist';
+import Info from '../../components/Info';
 
 import {Settings} from '../../components/Icons';
 
@@ -21,6 +22,7 @@ import {AudioFile} from '../../types';
 
 import {SCREENS} from '../../consts/screens';
 import {COLORS} from '../../consts/colors';
+import Cover from '../../components/Cover';
 
 type MainScreenNavigationProp = StackNavigationProp<StackParamList, 'Main'>;
 
@@ -136,40 +138,43 @@ const Main = ({navigation}: MainProps): JSX.Element => {
 
   return useObserver(() => (
     <View style={styles.wrap}>
-      <View style={styles.iconWrap}>
-        <IconButton onPress={goToSettings}>
-          <Settings width={60} height={60} color={COLORS.icon} />
-        </IconButton>
-      </View>
-      <View style={styles.playersWrap}>
-        <Player
-          repeat
-          bubbleUi
-          file={playlistsStore.currentFx}
-          paused={fxPaused}
-          toggle={toggleFx}
-          volume={fxVolume}
-          onTogglePlaylist={onToggleFxPlaylist}
-        />
-        <View style={styles.volumeWrap}>
-          {/* TODO: Add `mute` button */}
-          <Slider onChange={setFxVolume} />
-          <Slider onChange={setMusicVolume} />
+      <Cover file={playlistsStore.currentMusic} wrapStyles={styles.coverWrap}>
+        <View style={styles.iconWrap}>
+          <IconButton onPress={goToSettings}>
+            <Settings width={60} height={60} color={COLORS.icon} />
+          </IconButton>
         </View>
-        <Player
-          ui
-          repeat={repeat}
-          file={playlistsStore.currentMusic}
-          paused={paused}
-          toggle={toggle}
-          volume={musicVolume}
-          onNext={onNext}
-          onPrevious={onPrevious}
-          onEnd={onNext}
-          onToggleRepeat={onToggleRepeat}
-          onTogglePlaylist={onToggleMusicPlaylist}
-        />
-      </View>
+        <View style={styles.playersWrap}>
+          <Player
+            repeat
+            bubbleUi
+            file={playlistsStore.currentFx}
+            paused={fxPaused}
+            toggle={toggleFx}
+            volume={fxVolume}
+            onTogglePlaylist={onToggleFxPlaylist}
+          />
+          <View style={styles.volumeWrap}>
+            {/* TODO: Add `mute` button */}
+            <Slider onChange={setFxVolume} />
+            <Slider onChange={setMusicVolume} />
+          </View>
+          <Info file={playlistsStore.currentMusic} />
+        </View>
+      </Cover>
+      <Player
+        ui
+        repeat={repeat}
+        file={playlistsStore.currentMusic}
+        paused={paused}
+        toggle={toggle}
+        volume={musicVolume}
+        onNext={onNext}
+        onPrevious={onPrevious}
+        onEnd={onNext}
+        onToggleRepeat={onToggleRepeat}
+        onTogglePlaylist={onToggleMusicPlaylist}
+      />
       <Modal visible={musicPlaylistVisible} onClose={onToggleMusicPlaylist}>
         <Playlist
           list={playlistsStore.musicPlaylist}
@@ -193,6 +198,10 @@ const styles = StyleSheet.create({
     position: 'relative',
     flex: 1,
     backgroundColor: COLORS.background,
+  },
+  coverWrap: {
+    position: 'relative',
+    flex: 1,
   },
   volumeWrap: {
     flexDirection: 'row',

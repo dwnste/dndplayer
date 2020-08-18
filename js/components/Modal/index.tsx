@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   wrap: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.semiTransparentBackground,
     borderRadius: 15,
 
     paddingTop: 20,
