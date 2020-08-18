@@ -1,5 +1,8 @@
-import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useState, useCallback} from 'react';
+import {BackHandler, StyleSheet, View} from 'react-native';
+import {useFocusEffect, useNavigationState} from '@react-navigation/native';
+
+import minimizeModule from '../../modules/minimize';
 
 import IconButton from '../../components/IconButton';
 import Player from '../../components/Player';
@@ -35,6 +38,27 @@ const Main = ({navigation}: MainProps): JSX.Element => {
   const [fxVolume, setFxVolume] = useState(1);
   const [musicPlaylistVisible, setMusicPlaylistVisible] = useState(false);
   const [fxPlaylistVisible, setFXPlaylistVisible] = useState(false);
+
+  const routesLength = useNavigationState(({routes: {length}}) => length);
+  const isOnlyRoute = routesLength === 1;
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        if (isOnlyRoute) {
+          minimizeModule.minimizeApp();
+          return true;
+        }
+
+        return false;
+      };
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [isOnlyRoute]),
+  );
 
   const toggle = (): void => {
     if (!playlistsStore.currentMusic) {
