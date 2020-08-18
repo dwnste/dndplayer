@@ -7,17 +7,18 @@
     "ios": "react-native run-ios",
     "build:android": "cd android && ./gradlew assembleRelease && cd ..",
     "bundle:android": "cd android && ./gradlew bundleRelease && cd ..",
+    "clean:android": "cd android && ./gradlew clean && cd ..",
     "start": "react-native start --reset-cache",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "@react-native-community/async-storage": "^1.11.0",
+    "@react-native-community/async-storage": "^1.12.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/native": "^5.7.3",
     "@react-navigation/stack": "^5.9.0",
-    "mobx": "^5.15.4",
-    "mobx-react-lite": "^1.5.2",
+    "mobx": "^5.15.6",
+    "mobx-react-lite": "^2.0.7",
     "react": "16.13.1",
     "react-native": "0.63.2",
     "react-native-device-info": "^5.6.5",
@@ -28,7 +29,7 @@
     "react-native-screens": "^2.10.1",
     "react-native-svg": "^12.1.0",
     "react-native-video": "^5.1.0-alpha7",
-    "rn-vertical-slider": "^1.0.6"
+    "rn-vertical-slider": "^2.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",

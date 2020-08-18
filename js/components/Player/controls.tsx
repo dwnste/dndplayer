@@ -49,6 +49,7 @@ const Controls = ({
     Animated.timing(progressAnimation.current, {
       toValue: progress,
       duration: 100,
+      useNativeDriver: false,
     }).start();
   }, [progress]);
 
