@@ -3,6 +3,7 @@ package com.dndplayer;
 import android.app.Application;
 import android.content.Context;
 import com.dndplayer.MinimizePackage;
+import com.dndplayer.MetadataPackage;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
@@ -26,6 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
 
           packages.add(new MinimizePackage());
+          packages.add(new MetadataPackage());
 
           return packages;
         }

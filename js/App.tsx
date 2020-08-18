@@ -1,19 +1,14 @@
 import React, {useLayoutEffect, useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
-
 import {NavigationContainer} from '@react-navigation/native';
-import {
-  createStackNavigator,
-  StackCardInterpolationProps,
-  StackCardInterpolatedStyle,
-} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 
 import {configure} from 'mobx';
 
 import Settings from './screens/Settings';
 import Main from './screens/Main';
 
-import {filterAudioFiles} from './utils/filesfilter';
+import preparePlaylist from './utils/preparePlaylist';
 import {requestExternalStorageReading} from './utils/permissions';
 
 import {useStores} from './hooks';
@@ -27,15 +22,6 @@ export type StackParamList = {
 
 // Set mobx
 configure({enforceActions: 'observed'});
-
-// Fade animation for transitions
-const cardStyleInterpolator = ({
-  current,
-}: StackCardInterpolationProps): StackCardInterpolatedStyle => ({
-  cardStyle: {
-    opacity: current.progress,
-  },
-});
 
 const Stack = createStackNavigator<StackParamList>();
 
@@ -59,23 +45,15 @@ const App = (): JSX.Element => {
           settingsStore.updateMusicExplorer(settingsStore.paths.music),
         ]);
 
-        const filteredMusicList = filterAudioFiles(
+        const musicPlaylist = await preparePlaylist(
           settingsStore.explorers.music.items,
         );
-        const filteredFxList = filterAudioFiles(
+        const fxPlaylist = await preparePlaylist(
           settingsStore.explorers.fx.items,
         );
 
-        playlistsStore.setPlaylistForMusic(filteredMusicList);
-        playlistsStore.setPlaylistForFx(filteredFxList);
-
-        if (filteredMusicList.length > 0) {
-          playlistsStore.setCurrentMusic(playlistsStore.musicPlaylist[0]);
-        }
-
-        if (filteredFxList.length > 0) {
-          playlistsStore.setCurrentFx(playlistsStore.fxPlaylist[0]);
-        }
+        playlistsStore.updateMusicPlaylist(musicPlaylist);
+        playlistsStore.updateFxPlaylist(fxPlaylist);
       } catch {}
 
       settingsStore.setLoading(false);
@@ -96,7 +74,9 @@ const App = (): JSX.Element => {
           <Stack.Screen
             name={SCREENS.Settings}
             component={Settings}
-            options={{cardStyleInterpolator}}
+            options={{
+              ...TransitionPresets.SlideFromRightIOS,
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>
